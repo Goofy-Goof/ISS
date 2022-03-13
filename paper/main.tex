@@ -53,8 +53,8 @@ The pretext task is the self-supervised learning task solved to learn visual rep
 
 \cite{kolesnikov2019revisiting} Pretext tasks had proven to increase models accuracy, and are also belived to contribute to model learning important (as per human agents) features. \newline
 
-In this paper I would like to investigate wether including pretext tasks in training process has any correlation with networks vulnerability to adversarial attacks
-
+In this paper I would like to evaluate how state of art pretext tasks influence NN vulnerability against adversarial attacks. 
+  
 \section{Background and Related work}
 
 \subsection{Efficient Net}
@@ -144,21 +144,8 @@ In order to addapt FGSM aproach described above, the gradient of loss this image
   \end{subfigure}
 \end{figure}
 
-\subsection{Evaluation Process}
-Before starting training 5\% of images from dataset were reserved.
-After pretext and downstream training is finished, evaluation round is executed.
-In each round model is given images to predict, correct prediction are recoreded.
-Then adversarial round is started, in which each correctly classified image is overlaped with adversarial pattern generated for it. The values for $\epsilon$ are limited to [0.01, 0.1, 0.15], as higher values had shown to noticably change to images appereance. 
-In case predicton was incorrect, the value of $\epsilon$ is recorded, and we move on to next image.
-
-
-
-The two important metrics to be looked out for are 'Missclassified'
-and $\overline{\epsilon}$. Where $\overline{\epsilon}$ is a simple arithmetic mean over $epsilon$ value in each adversarial image, which made NN missclassify. 'Missclassified' is defined as follows:
-\begin{equation}
-    Missclassified = \frac{\# wrongly\;classified\;images}{\# correctly\;classified\;images} \cdot 100 \%
-\end{equation}
-
+\subsection{Evaluation approach}
+In order to evaluate how including pretext task in training process influences NNs vulnerability against adversarial attacks, I have measured intensity of adversarial pattern, needed to make NN miss clasify previously correctly classified images. I compare results for own implementation and EfficientNet (trained from scratch as well as used in transfer learning manner) on 2 datasets: \bold{tf\_flowers} and \bold{stanford\_dogs}. I've observed \epsilon as function of pretext tasks or number of pretext training  epochs or number of downstream epochs.
 
 \newpage
 \section{Results}
@@ -214,6 +201,9 @@ and $\overline{\epsilon}$. Where $\overline{\epsilon}$ is a simple arithmetic me
 \end{table}
 
 \section{Discussion}
+\subsection{Interpretation}
+\subsection{Limitations}
+
 \section{Conslusion}
 
 

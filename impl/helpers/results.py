@@ -21,7 +21,9 @@ def map_pretext_epochs(x):
 
 
 # replace with real credentials during evaluation
-mongo_uri = None
+mongo_uri = os.environ['MONGO_URI']
+model = 'xxx'
+dataset = 'xxx'
 
 if __name__ == '__main__':
     client = MongoClient(mongo_uri)

@@ -5,17 +5,14 @@ from .dataset_wrapper import Dataset
 from .pretext import PretextTrainer
 from .utils import prediction_round
 from pymongo import MongoClient
-from .config import mongo_connection_uri, batch_size
+from .config import mongo_connection_uri, batch_size, logs_dir
 import tensorflow as tf
 
 _log = logging.getLogger(__name__)
 
 
 def callbacks(name):
-    # For local
-    # _log_dir = 'logs/fit/' + datetime.now().strftime("%Y%m%d-%H%M%S")
-    # For colab
-    _log_dir = 'gs://iss_train_logs/fit/' + datetime.now().strftime("%Y%m%d-%H%M%S") + f'_{name}'
+    _log_dir = f'{logs_dir}_' + datetime.now().strftime("%Y%m%d-%H%M%S") + f'_{name}'
     _tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=_log_dir, histogram_freq=1)
     return [_tensorboard_callback, tf.keras.callbacks.TerminateOnNaN()]
 
@@ -32,7 +29,8 @@ def freeze_conv_layers(model):
     return model
 
 
-def eval_round(model_constr, dataset: Dataset, pretext_trainers: [PretextTrainer], tpu_strategy, downstream_epochs, pretext_epochs):
+def eval_round(model_constr, dataset: Dataset, pretext_trainers: [PretextTrainer], tpu_strategy, downstream_epochs,
+               pretext_epochs):
     # model_constr is a.e create_eff_net_frozen(...)
     NN = model_constr(dataset.num_classes, tpu_strategy)
     _log.info(f'Evaluating {NN.name}')
@@ -65,7 +63,7 @@ def persist_result(model, dataset, start, end, downstream_epochs, pretext_epochs
     json = {
         'model_type': model.name,
         'dataset': dataset.name,
-        'pretext_trainers':pr_tasks ,
+        'pretext_trainers': pr_tasks,
         'from': start,
         'until': end,
         'downstream_epochs': downstream_epochs,
