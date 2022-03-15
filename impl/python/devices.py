@@ -1,11 +1,18 @@
 import tensorflow as tf
 
 
-class TpuStub:
+class CpuStub:
 
     @staticmethod
     def scope():
         return tf.device('/CPU:0')
+
+
+class GpuStub:
+
+    @staticmethod
+    def scope():
+        return tf.device('/GPU:0')
 
 
 def init_tpu():

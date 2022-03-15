@@ -5,4 +5,4 @@ datasets
 *.png
 *.csv
 *.txt
-env.py
+helper scripts/env.py

@@ -3,6 +3,7 @@ from pymongo import MongoClient
 import pandas as pd
 from numpy import round
 from datetime import datetime
+import os
 
 
 def map_pretext_name(x):
@@ -28,8 +29,8 @@ dataset = 'xxx'
 if __name__ == '__main__':
     client = MongoClient(mongo_uri)
     db = client.iss.results
-    query = {'model_type': 'efficientnetb0', 'from': {'$gte': datetime(2022, 1, 18, 00, 00)}}
-    result = db.find(query).sort('downstream_epochs', pymongo.ASCENDING)
+    query = {'model_type': model, }
+    result = db.find(query).sort('downstream_epochs', )
     result = [x for x in result]
     column_order = ['downstream epochs', 'correctly classified', 'pretext tasks', 'pretext epochs',
                     'missclassified', 'epsilon mean']

@@ -31,13 +31,13 @@ class PretextTrainer(ABC):
         new_model.compile(optimizer=eff_net_optimizer, loss=def_loss, metrics=def_metrics)
         return new_model
 
-    def train_pretrext_task(self, dataset: Dataset, model, tpu_strategy, epochs):
+    def train_pretrext_task(self, dataset: Dataset, model, device_strategy, epochs):
         _log.info(f'Training pretext with {self.name}')
         ds_train, ds_val = self._create_pretext_dataset(dataset.name)
-        with tpu_strategy.scope():
+        with device_strategy.scope():
             p_model = self._replace_output_layer(model, self.pretext_label_num)
         p_model.fit(ds_train, epochs=epochs, validation_data=ds_val, callbacks=tf.keras.callbacks.TerminateOnNaN())
-        with tpu_strategy.scope():
+        with device_strategy.scope():
             og_model = self._replace_output_layer(model, dataset.num_classes)
         return og_model
 

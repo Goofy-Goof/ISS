@@ -14,9 +14,9 @@ basic_model_optimizer = 'adam'
 eff_net_optimizer = tf.keras.optimizers.Adam(learning_rate=1e-2)
 
 
-def create_basic_model(num_classes, tpu_strategy):
+def create_basic_model(num_classes, device_strategy):
     _log.info('Creating basic model')
-    with tpu_strategy.scope():
+    with device_strategy.scope():
         model = Sequential([
             layers.Resizing(img_height, img_width),
             layers.Rescaling(1. / 255),
@@ -35,10 +35,10 @@ def create_basic_model(num_classes, tpu_strategy):
     return model
 
 
-def create_eff_net_frozen(num_classes, tpu_strategy):
+def create_eff_net_frozen(num_classes, device_strategy):
     _log.info('Creating EfficientNetB0 frozen')
     # https://keras.io/examples/vision/image_classification_efficientnet_fine_tuning/
-    with tpu_strategy.scope():
+    with device_strategy.scope():
         inputs = layers.Input(shape=(img_height, img_width, 3))
         conv_base = EfficientNetB0(include_top=False, weights='imagenet', input_tensor=inputs)
         conv_base.trainable = False
@@ -53,8 +53,8 @@ def create_eff_net_frozen(num_classes, tpu_strategy):
     return func_model
 
 
-def create_eff_net_trainable(num_classes, tpu_strategy):
-    with tpu_strategy.scope():
+def create_eff_net_trainable(num_classes, device_strategy):
+    with device_strategy.scope():
         eff_net = EfficientNetB0(include_top=True, weights=None, classes=num_classes)
         eff_net.compile(optimizer=eff_net_optimizer, loss=def_loss, metrics=def_metrics)
     return eff_net

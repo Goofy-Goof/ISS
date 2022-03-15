@@ -11,10 +11,13 @@ import tensorflow as tf
 _log = logging.getLogger(__name__)
 
 
-def callbacks(name):
-    _log_dir = f'{logs_dir}_' + datetime.now().strftime("%Y%m%d-%H%M%S") + f'_{name}'
-    _tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=_log_dir, histogram_freq=1)
-    return [_tensorboard_callback, tf.keras.callbacks.TerminateOnNaN()]
+def callbacks():
+    #_log_dir = f'{logs_dir}_' + datetime.now().strftime("%Y%m%d-%H%M%S")
+    #_tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=_log_dir, histogram_freq=1)
+    return [
+        #_tensorboard_callback,
+        tf.keras.callbacks.TerminateOnNaN()
+    ]
 
 
 def freeze_conv_layers(model):
@@ -29,24 +32,21 @@ def freeze_conv_layers(model):
     return model
 
 
-def eval_round(model_constr, dataset: Dataset, pretext_trainers: [PretextTrainer], tpu_strategy, downstream_epochs,
-               pretext_epochs):
+def eval_round(model_constr, dataset: Dataset, pretext_trainers: [PretextTrainer], device_strategy,
+               downstream_epochs, pretext_epochs):
     # model_constr is a.e create_eff_net_frozen(...)
-    NN = model_constr(dataset.num_classes, tpu_strategy)
+    NN = model_constr(dataset.num_classes, device_strategy)
     _log.info(f'Evaluating {NN.name}')
     _log.info(f'Pretext trainers = {[i.name for i in pretext_trainers]}')
     start = datetime.now()
     if len(pretext_trainers) != 0:
         _log.info(f'Training pretext for {pretext_epochs} epochs and downstream for {downstream_epochs}')
         for trainer in pretext_trainers:
-            trainer.train_pretrext_task(dataset, NN, tpu_strategy, pretext_epochs)
+            trainer.train_pretrext_task(dataset, NN, device_strategy, pretext_epochs)
         freeze_conv_layers(NN)
     else:
         _log.info(f'Training downstream for {downstream_epochs} epochs')
-    log_name = NN.name
-    if len(pretext_trainers) != 0:
-        log_name = log_name + f'_{[i.name for i in pretext_trainers]}'
-    NN.fit(dataset.train, validation_data=dataset.val, epochs=downstream_epochs, callbacks=callbacks(log_name))
+    NN.fit(dataset.train, validation_data=dataset.val, epochs=downstream_epochs, callbacks=callbacks())
     ev = NN.evaluate(dataset.val)
     _log.info('Started prediction round')
     pred_img, pred_label = prediction_round(dataset, NN)
