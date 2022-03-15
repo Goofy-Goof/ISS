@@ -3,5 +3,3 @@ logs
 .ipynb_checkpoints
 __pycache__
 datasets
-../skillshare/*
-../related work/*
