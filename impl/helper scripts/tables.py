@@ -1,9 +1,7 @@
 from pymongo import MongoClient
 import pandas as pd
-from numpy import round
 import os
 from env import set_env
-
 
 set_env()
 
@@ -24,13 +22,13 @@ mongo_uri = os.environ['MONGO_URI']
 db = MongoClient(mongo_uri).iss.results
 
 
-def create_table(query):
-
+def create_table(nn):
+    query = {'model_type': nn, 'dataset': 'tf_flowers'}
     projection = {
         'downstream_epochs': 1,
         'pretext_epochs': 1,
         'total_test_images': 1,
-        'epsilon':1,
+        'epsilon': 1,
         'fooled_times': 1,
         'successfully_predicted': 1,
         'pretext_trainers': 1
@@ -41,10 +39,14 @@ def create_table(query):
     df['epsilon'] = df['epsilon'].round(3)
     df['correct_classification'] = (df['successfully_predicted'] / df['total_test_images'] * 100).round(3)
     df['miss_classification'] = (df['fooled_times'] / df['successfully_predicted'] * 100).round(3)
-    df.to_csv('tables/basic_nn.csv', columns=['downstream_epochs', 'pretext_trainers', 'pretext_epochs', 'correct_classification', 'miss_classification', 'epsilon'])
-    df.to_latex('tables/basic_nn.tex', columns=['downstream_epochs', 'pretext_trainers', 'pretext_epochs', 'correct_classification', 'miss_classification', 'epsilon'])
+    df.to_csv(f'tables/{nn}.csv',
+              columns=['downstream_epochs', 'pretext_trainers', 'pretext_epochs', 'correct_classification',
+                       'miss_classification', 'epsilon'])
+    df.to_latex(f'tables/{nn}.tex',
+                columns=['downstream_epochs', 'pretext_trainers', 'pretext_epochs', 'correct_classification',
+                         'miss_classification', 'epsilon'])
 
 
 if __name__ == '__main__':
-    query = {'model_type': 'basic_convolutional_network', 'dataset': 'tf_flowers'}
-    create_table(query)
+    create_table('basic_convolutional_network')
+    create_table('efficientnetb0')
