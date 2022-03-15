@@ -53,5 +53,5 @@ def create_table():
 
 
 if __name__ == '__main__':
-    #plot_eff_net_transfer_metrics()
+    plot_eff_net_transfer_metrics()
     create_table()

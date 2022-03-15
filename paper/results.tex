@@ -1,0 +1,123 @@
+\section{Results}
+
+\subsection{Own (basic) implementation}
+
+\begin{longtable}{|| p{.15\textwidth} | p{.20\textwidth} | p{.10\textwidth} | p{.20\textwidth} | p{.20\textwidth} | p{.10\textwidth} ||}
+    \hline \hline
+    downstream epochs & pretext tasks & pretext epochs & correct classification \% & miss classification \% & epsilon \\ \hline \hline
+    10                & rotation      & 10             & 38.281                    & 100.000                & 0.055   \\
+    10                & rotation      & 20             & 37.891                    & 100.000                & 0.050   \\
+    10                & rotation      & 30             & 40.234                    & 100.000                & 0.056   \\
+    10                & rotation      & 50             & 15.234                    & 0.000                  & NaN     \\
+    20                & rotation      & 10             & 42.969                    & 100.000                & 0.033   \\
+    20                & rotation      & 20             & 40.234                    & 100.000                & 0.033   \\
+    20                & rotation      & 30             & 47.266                    & 100.000                & 0.049   \\
+    20                & rotation      & 50             & 44.141                    & 100.000                & 0.045   \\
+    30                & rotation      & 10             & 15.234                    & 0.000                  & NaN     \\
+    30                & rotation      & 20             & 40.625                    & 99.038                 & 0.043   \\
+    30                & rotation      & 30             & 42.969                    & 100.000                & 0.047   \\
+    30                & rotation      & 50             & 39.453                    & 98.020                 & 0.037   \\
+    50                & rotation      & 10             & 41.797                    & 100.000                & 0.034   \\
+    50                & rotation      & 20             & 43.750                    & 100.000                & 0.029   \\
+    50                & rotation      & 30             & 44.922                    & 100.000                & 0.036   \\
+    50                & rotation      & 50             & 42.188                    & 98.148                 & 0.052   \\
+    \caption{\label{tab:table1}Results for own implementation}
+\end{longtable}
+
+\begin{figure}[h]
+    \caption{Recored accuracy for own implementation}
+    \centering
+    \includegraphics[width=1\textwidth]{../impl/helper scripts/plots/basic_convolutional_network_acc}
+\end{figure}
+
+\begin{figure}[h]
+    \caption{Recorded missclassification rate for own implementation}
+    \centering
+    \includegraphics[width=1\textwidth]{../impl/helper scripts/plots/basic_convolutional_network_miss}
+\end{figure}
+
+\begin{figure}[h]
+    \caption{Recorded $\overline{\epsilon}$ for own implementation}
+    \centering
+    \includegraphics[width=1\textwidth]{../impl/helper scripts/plots/basic_convolutional_network_eps}
+\end{figure}
+
+\subsection{EfficientNet}
+
+
+\begin{longtable}{|| p{.15\textwidth} | p{.20\textwidth} | p{.10\textwidth} | p{.20\textwidth} | p{.20\textwidth} | p{.10\textwidth} ||}
+    \hline \hline
+    downstream epochs & pretext tasks     & pretext epochs & correct classification \% & miss classification \% & epsilon \\ \hline \hline
+    10                &                   & NaN            & 18.359                    & 100.000                & 0.069   \\
+    10                & rotation          & 10.0           & 18.750                    & 81.250                 & 0.052   \\
+    10                & jigsaw            & 10.0           & 22.656                    & 86.207                 & 0.096   \\
+    10                & rotation + jigsaw & 10.0           & 21.094                    & 51.852                 & 0.089   \\
+    20                &                   & NaN            & 39.062                    & 92.000                 & 0.025   \\
+    30                &                   & NaN            & 41.406                    & 99.057                 & 0.025   \\
+    50                &                   & NaN            & 38.281                    & 96.939                 & 0.019   \\
+    20                & rotation          & 10.0           & 15.234                    & 0.000                  & NaN     \\
+    20                & jigsaw            & 10.0           & 25.391                    & 89.231                 & 0.068   \\
+    10                & rotation          & 20.0           & 25.781                    & 33.333                 & 0.095   \\
+    10                & jigsaw            & 20.0           & 17.969                    & 100.000                & 0.024   \\
+    10                & rotation + jigsaw & 20.0           & 16.016                    & 85.366                 & 0.110   \\
+    10                & rotation          & 30.0           & 10.547                    & 0.000                  & NaN     \\
+    10                & jigsaw            & 30.0           & 14.844                    & 0.000                  & NaN     \\
+
+    \caption{\label{tab:table2}Results for EfficientNet}
+\end{longtable}
+
+\begin{figure}[h]
+    \caption{Recored accuracy}
+    \centering
+    \includegraphics[width=1\textwidth]{../impl/helper scripts/plots/efficientnetb0_acc}
+\end{figure}
+
+\begin{figure}[h]
+    \caption{Recorded missclassification}
+    \centering
+    \includegraphics[width=1\textwidth]{../impl/helper scripts/plots/efficientnetb0_miss}
+\end{figure}
+
+\begin{figure}[h]
+    \caption{Recorded $\overline{\epsilon}$}
+    \centering
+    \includegraphics[width=1\textwidth]{../impl/helper scripts/plots/efficientnetb0_eps}
+\end{figure}
+
+\subsection{EfficientNet pre-trained on ImageNet}
+
+\begin{longtable}{|| p{.15\textwidth} | p{.20\textwidth} | p{.10\textwidth} | p{.20\textwidth} | p{.20\textwidth} | p{.10\textwidth} ||}
+    \hline \hline
+    downstream epochs & correct classification \% & miss classification \% & epsilon \\ \hline \hline
+
+    10                & 65.625                    & 92.857                 & 0.022   \\ \hline
+    20                & 64.453                    & 92.121                 & 0.022   \\ \hline
+    30                & 63.281                    & 91.975                 & 0.026   \\ \hline
+    50                & 65.625                    & 91.667                 & 0.025   \\ \hline
+
+    \caption{\label{tab:table3}Results for EfficientNet pre-trained on ImageNet}
+\end{longtable}
+
+
+
+\begin{figure}[h]
+    \caption{Recorded accuracy}
+    \centering
+    \includegraphics[width=.7\textwidth]{../impl/helper scripts/plots/effnet_transfer_acc}
+\end{figure}
+
+\begin{figure}[h]
+    \caption{Recorded missclassification rate}
+    \centering
+    \includegraphics[width=.7\textwidth]{../impl/helper scripts/plots/effnet_transfer_miss}
+\end{figure}
+
+\begin{figure}[h]
+    \caption{Recorded $\overline{\epsilon}$}
+    \centering
+    \includegraphics[width=.7\textwidth]{../impl/helper scripts/plots/effnet_transfer_eps}
+\end{figure}
+
+
+
+

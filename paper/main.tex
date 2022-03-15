@@ -1,0 +1,48 @@
+\documentclass[12pt]{extarticle}
+
+% Language setting
+% Replace `english' with e.g. `spanish' to change the document language
+\usepackage[english]{babel}
+\usepackage[
+    backend=biber,
+    style=alphabetic,
+]{biblatex}
+\addbibresource{cite.bib} %Imports bibliography file
+\usepackage{soul}
+\usepackage[export]{adjustbox}
+\usepackage{listings}
+\usepackage{makecell}
+\usepackage{longtable}
+\usepackage[table,x11names]{xcolor}
+% Set page size and margins
+% Replace `letterpaper' with`a4paper' for UK/EU standard size
+\usepackage[letterpaper,top=2cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+
+% Useful packages
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+
+\title{\st{Pretext Tasks and Adversarial Attacks}}
+\author{Artem Sereda artem.sereda@campus.tu-berlin.de}
+
+
+\begin{document}
+    \maketitle
+
+    \begin{abstract}
+        \normalsize
+        Abstract
+    \end{abstract}
+
+    \newpage
+    \include{intro}
+    \newpage
+    \include{results}
+
+    \include{discussion}
+
+
+    \printbibliography
+\end{document}

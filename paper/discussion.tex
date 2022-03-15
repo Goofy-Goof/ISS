@@ -1,0 +1,20 @@
+\section{Discussion}
+
+In this paper I set up a goal to investigate if including pretext task in training process could reduce NNs vulnerability against adversarial attacks.
+
+\subsection{Interpretation}
+
+\begin{itemize}
+    \item high values are seen for low number of epochs, but these points correspond also to low prediction accuracy
+    \item next higher value are seen when number of pretext epochs is bigger than downstream epochs
+    \item jigsaw with all 24 permutation seems to make everything only worse
+\end{itemize}
+
+\subsection{Limitations}
+\begin{itemize}
+    \item evaluation for each scenario was run only once
+    \item evaluation was done only for one dataset
+\end{itemize}
+
+
+\section{Conslusion}
