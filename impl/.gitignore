@@ -1,8 +1,5 @@
 logs
 .idea
 .ipynb_checkpoints
+__pycache__
 datasets
-*.png
-*.csv
-*.txt
-helper scripts/env.py

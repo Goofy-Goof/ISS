@@ -7,6 +7,7 @@ from functools import reduce, lru_cache
 from itertools import permutations
 from .dataset_wrapper import load_dataset, resize_ds, configure_ds, Dataset
 from .models import def_metrics, def_loss, basic_model_optimizer, eff_net_optimizer
+import numpy as np
 
 _log = logging.getLogger(__name__)
 
@@ -119,7 +120,9 @@ class JigsawPretextTrainer(PretextTrainer):
         train_full = []
         val_full = []
         possible_perm = list(permutations([0, 1, 2, 3]))
-        for i, perm in enumerate(possible_perm):
+        chosen_perm_index = np.random.choice(range(24), 4)
+        chosen_perm = [possible_perm[i] for i in chosen_perm_index]
+        for i, perm in enumerate(chosen_perm):
             train_full.append(train.map(lambda xt, yt: _make_puzzle(xt, yt, perm, i)))
             val_full.append(val.map(lambda xv, yv: _make_puzzle(xv, yv, perm, i)))
         pr_train, pr_val = self._concetenate_ds(train_full, val_full)

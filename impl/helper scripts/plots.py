@@ -1,35 +1,51 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+from tables import db, map_pretext_name
 
-epsilon_mean = [0.010, 0.013, 0.012, 0.013, 0.028, 0.012, 0.010, 0.011, 0.010, 0.011, 0.011, 0.011,
-                0.012, 0.010, 0.011, 0.010]
+
+def plot_no_pretext():
+    projection = {'epsilon': 1, 'downstream_epochs': 1}
+    epochs = []
+    eps = []
+    for i in [10, 20, 30, 50]:
+        query = {'model_type': 'basic_convolutional_network', 'dataset': 'tf_flowers', 'pretext_trainers': '-', 'downstream_epochs': i}
+        res = list(db.find(query, projection).sort('until'))
+        epochs.append([i['downstream_epochs'] for i in res])
+        eps.append([i['epsilon'] for i in res])
+    epochs = np.array(epochs).T
+    eps = np.array(eps).T
+    for i, j in zip(epochs, eps):
+        plt.plot(i, j, 'o-')
+    plt.ylabel('$\overline{\epsilon}$')
+    plt.xlabel('# downstream epochs')
+    plt.title('$\overline{\epsilon}$ over 5 evalution rounds without pretext training')
+    plt.savefig('plots/basic_nn_no_pretext.png')
+    plt.show()
+
+
+def plot_pretext(task):
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
+    query = {
+            'model_type': 'basic_convolutional_network',
+            'dataset': 'tf_flowers',
+            'pretext_trainers': task
+        }
+    projection = {'downstream_epochs':1, 'pretext_epochs':1, 'epsilon':1}
+    res = list(db.find(query, projection).sort('downstream_epochs'))
+    x = [i['pretext_epochs'] for i in res]
+    y = [i['downstream_epochs'] for i in res]
+    z = [i['epsilon'] for i in res]
+    ax.scatter(x, y, z, s=50)
+    plt.xlabel('# pretext epochs')
+    plt.ylabel('# downstream epochs')
+    ax.set_zlabel('$\overline{\epsilon}$', rotation=270)
+    plt.title('$\overline{\epsilon}$ for ' + map_pretext_name(task) + ' pretext task')
+    plt.savefig(f'plots/basic_nn_{map_pretext_name(task)}.png')
+    plt.show()
+
 
 if __name__ == '__main__':
-    model = 'effnet_b0'
-    tasks = ['-', 'rotation', 'jigsaw', 'rotation + jigsaw']
-
-    plt.bar(tasks, epsilon_mean[0:4], width=1, edgecolor='white', linewidth=0.7)
-    plt.bar(tasks, epsilon_mean[4:8], width=1, edgecolor='white', linewidth=0.7)
-    plt.bar(tasks, epsilon_mean[8:12], width=1, edgecolor='white', linewidth=0.7)
-    plt.bar(tasks, epsilon_mean[12:], width=1, edgecolor='white', linewidth=0.7)
-    plt.legend(['(10, 30)', '(20, 50)', '(30, 10)', '(50, 20)'])
-    txt = "1st number in legend represent downstream epochs, 2nd pretext epochs"
-    plt.figtext(0.5, 0.01, txt, wrap=True, horizontalalignment='center', fontsize=12)
-    plt.savefig(f'{model}_tasks.png')
-    plt.show()
-
-    epochs = ['10', '20', '30', '50']
-    plt.bar(epochs, np.take(epsilon_mean, [0, 4, 8, 12]), width=1, edgecolor='white', linewidth=0.7)
-    plt.bar(epochs, np.take(epsilon_mean, [1, 5, 9, 13]), width=1, edgecolor='white', linewidth=0.7)
-    plt.bar(epochs, np.take(epsilon_mean, [2, 6, 10, 14]), width=1, edgecolor='white', linewidth=0.7)
-    plt.bar(epochs, np.take(epsilon_mean, [3, 7, 11, 15]), width=1, edgecolor='white', linewidth=0.7)
-    plt.legend(tasks)
-    plt.savefig(f'{model}_ep.png')
-    plt.show()
-
-    plt.bar(epochs, np.take(epsilon_mean, [9, 13, 1, 5]), width=1, edgecolor='white', linewidth=0.7)
-    plt.bar(epochs, np.take(epsilon_mean, [10, 14, 2, 6]), width=1, edgecolor='white', linewidth=0.7)
-    plt.bar(epochs, np.take(epsilon_mean, [11, 15, 3, 7]), width=1, edgecolor='white', linewidth=0.7)
-    plt.legend(tasks[1:])
-    plt.savefig(f'{model}_pret_ep.png')
-    plt.show()
+    plot_no_pretext()
+    #plot_pretext(['RotationPretextTrainer'])
