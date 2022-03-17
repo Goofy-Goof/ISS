@@ -1,20 +1,43 @@
 \section{Discussion}
 
-In this paper I set up a goal to investigate if including pretext task in training process could reduce NNs vulnerability against adversarial attacks.
+\paragraph{Goal}
+In this paper I set up a goal to investigate if including pretext task in training process could reduce NNs
+vulnerability against adversarial attacks.
+After collecting, visualizing and analyzing collected data data, I can see that
 
-\subsection{Interpretation}
-
+\paragraph{Observations}
 \begin{itemize}
-    \item high values are seen for low number of epochs, but these points correspond also to low prediction accuracy
-    \item next higher value are seen when number of pretext epochs is bigger than downstream epochs
-    \item jigsaw with all 24 permutation seems to make everything only worse
-\end{itemize}
-
-\subsection{Limitations}
-\begin{itemize}
-    \item evaluation for each scenario was run only once
-    \item evaluation was done only for one dataset
+    \item slightly higher values for $\epsilon$ can be seen for scenarios, where pretext task was included in training process
+    \item however this often pair up with slightly decreased accuracy
+    \item pre-training model for classification task on large dataset (a.e.ImageNet)
+    had shown better accuracy with roughly same values for $\epsilon$
 \end{itemize}
 
 
-\section{Conslusion}
+\paragraph{Interpretation}
+As it can be seen in generalized formula for FGSM:
+\\
+$adv\_x = x + \epsilon \cdot sign(\nabla_x J(\theta, x, y))$
+\\
+the adversarial pattern is generated from NNs internal gradient over loss function.
+It is safe to assume, that better accuracy pairs with more stiff gradient, therefore the better NN predicts,
+the easier it is to fool it with FGSM.
+
+
+\paragraph{Limitations}
+Due to researchers (my) limited access to hardware acceleration, as well as tight time requirements paired with
+\\ having to work only on my own, this research comes with quite a few limitations.
+The main ones are:
+\begin{itemize}
+    \item The research question was evaluated only for 1 dataset.
+    \item Each training scenario was executed and evaluated only once.
+\end{itemize}
+
+
+\paragraph{Conslusion}
+In this paper I investigated how state-of-the-art pretext tasks can influence NNs vulnerability against adversarial attacks.
+The data I've collected didn't show a significant improvement comparing to the scenarios, where no pretext task was included
+in training process. \\ In some cases, it had only drastically reduced the accuracy.
+Knowledge of probability theory and common sense tell me that the data I've collected is not sufficient to
+draw a finalized answer from it.
+The question still remains open, due to very limited amount of data I was able to collect.

@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from tables import db
 
 taks = ['-', ['RotationPretextTrainer'], ['JigsawPretextTrainer'], ['RotationPretextTrainer', 'JigsawPretextTrainer']]
+marker_size = 50
 
 
 def plot_epsilon(nn):
@@ -23,7 +24,7 @@ def plot_epsilon(nn):
             x = np.zeros(len(z), dtype=float)
         else:
             x = [i['pretext_epochs'] for i in res]
-        ax.scatter(x, y, z, s=75)
+        ax.scatter(x, y, z, s=marker_size)
     plt.xlabel('# pretext epochs')
     plt.ylabel('# downstream epochs')
     ax.set_zlabel('$\overline{\epsilon}$')
@@ -51,7 +52,7 @@ def plot_accuracy(nn):
             x = np.zeros(len(z), dtype=float)
         else:
             x = [i['pretext_epochs'] for i in res]
-        ax.scatter(x, y, z, s=75)
+        ax.scatter(x, y, z, s=marker_size)
     plt.xlabel('# pretext epochs')
     plt.ylabel('# downstream epochs')
     ax.set_zlabel('Accuracy %')
@@ -74,12 +75,12 @@ def plot_missclassified(nn):
         y = [i['downstream_epochs'] for i in res]
         guessed = np.array([i['successfully_predicted'] for i in res])
         fooled = np.array([i['fooled_times'] for i in res])
-        z = (guessed - fooled) / guessed * 100
+        z = fooled / guessed * 100
         if t == '-':
             x = np.zeros(len(z), dtype=float)
         else:
             x = [i['pretext_epochs'] for i in res]
-        ax.scatter(x, y, z, s=75)
+        ax.scatter(x, y, z, s=marker_size)
     plt.xlabel('# pretext epochs')
     plt.ylabel('# downstream epochs')
     ax.set_zlabel('Miss classification %')
