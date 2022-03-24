@@ -1,12 +1,11 @@
 import tensorflow_datasets as tfds
-from .config import data_dir, img_width, img_height, batch_size
-import logging
+from .config import img_width, img_height, batch_size
 import tensorflow as tf
 
 
 def load_dataset(name, split):
-    return tfds.load(name=name, split=split, try_gcs=True, as_supervised=True, with_info=True,
-                     batch_size=batch_size, data_dir=data_dir)
+    return tfds.load(name=name, split=split, try_gcs=True, as_supervised=True,
+                     with_info=True, batch_size=batch_size)
 
 
 def resize_ds(ds):
