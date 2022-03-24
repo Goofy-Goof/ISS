@@ -1,12 +1,12 @@
-from adversarial import adversarial_round
 import logging
-from datetime import datetime
-from dataset import create_flowers_ds
-from pretext import PretextTrainer
-from utils import prediction_round
-from pymongo import MongoClient
-from config import mongo_connection_uri, batch_size, logs_dir
 import tensorflow as tf
+from dataset import create_flowers_ds
+from models import create_eff_net_trainable
+from tpu import init_tpu
+from utils import prediction_round, persist_result
+from adversarial import adversarial_round
+from datetime import datetime
+
 
 _log = logging.getLogger(__name__)
 
@@ -15,7 +15,7 @@ def_callbacks = [
     tf.keras.callbacks.EarlyStopping(monitor='loss', patience=3)
 ]
 
-
+"""
 def freeze_conv_layers(model):
     if model.name == 'efficient_net_frozen':
         return model
@@ -51,4 +51,21 @@ def eval_round(model_constr, pretext_trainers: [PretextTrainer], device_strategy
     end = datetime.now()
     persist_result(NN, dataset, start, end, downstream_epochs, pretext_epochs, pretext_trainers,
                    len(pred_label), epsilons, ev)
+"""
 
+
+def find_opt_down_epochs():
+    down_epochs = [10, 20, 30, 40, 50]
+    strategy = init_tpu()
+    for ep in down_epochs:
+        start = datetime.now()
+        ds = create_flowers_ds()
+        NN = create_eff_net_trainable(ds.num_classes, strategy)
+        NN.fit(ds.train, validation_data=ds.val, epochs=ep, callbacks=def_callbacks)
+        print('Started prediction round')
+        pred_img, pred_label = prediction_round(ds, NN)
+        print('Started adversarial round')
+        epsilons = adversarial_round(pred_img, pred_label, NN)
+        end = datetime.now()
+        persist_result(model_name=NN.name, dataset=ds, start=start, end=end, downstream_epochs=ep,
+                       pretext_epochs=None, pr_trainer=None, predicted_num=len(pred_label), epsilons=epsilons)
