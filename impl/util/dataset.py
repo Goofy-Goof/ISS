@@ -1,5 +1,5 @@
 import tensorflow_datasets as tfds
-from .config import data_dir, img_width, img_height, batch_size
+from config import data_dir, img_width, img_height, batch_size
 import logging
 import tensorflow as tf
 
@@ -47,15 +47,16 @@ class Dataset:
         )
 
 
-ds_names = [
+ds_on_gcs_names = [
     'tf_flowers',
     'cats_vs_dogs',
     'horses_or_humans',
     'stanford_dogs',
     'fashion_mnist',
     'rock_paper_scissors',
-    #'smallnorb',
     'colorectal_histology'
 ]
 
-#datasets = [Dataset(i) for i in ds_names]
+
+def create_flowers_ds():
+    return Dataset(ds_on_gcs_names[0])

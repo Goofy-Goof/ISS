@@ -1,5 +1,5 @@
 import tensorflow as tf
-from .utils import predict_batch, add_to_arr
+from utils import predict_batch, add_to_arr
 import numpy as np
 import logging
 

@@ -5,7 +5,7 @@ import logging
 from .config import img_width, img_height
 from functools import reduce, lru_cache
 from itertools import permutations
-from .dataset_wrapper import load_dataset, resize_ds, configure_ds, Dataset
+from .dataset import load_dataset, resize_ds, configure_ds, Dataset
 from .models import def_metrics, def_loss, basic_model_optimizer, eff_net_optimizer
 import numpy as np
 

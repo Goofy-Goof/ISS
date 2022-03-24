@@ -1,9 +1,10 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from .dataset_wrapper import Dataset
+from dataset import Dataset
 import logging
-from .config import batch_size
+from config import batch_size, mongo_connection_uri
 import tensorflow as tf
+from pymongo import MongoClient
 
 _log = logging.getLogger(__name__)
 
@@ -50,3 +51,26 @@ def prediction_round(dataset: Dataset, model) -> (np.ndarray, np.ndarray):
         correct_predicted_labels = add_to_arr(correct_predicted_labels, label_batch.numpy()[correct_prediction_indexes])
     _log.info(f'{len(correct_predicted_labels)} out of {len(data) * batch_size} have been correctly classified')
     return correct_predicted_images, correct_predicted_labels
+
+
+def persist_result(model_name, dataset: Dataset, start, end, downstream_epochs, pretext_epochs, pr_trainer,
+                   predicted_num, epsilons):
+    json = {
+        'model_type': model_name,
+        'dataset': dataset.name,
+        'from': start,
+        'until': end,
+        'downstream_epochs': downstream_epochs,
+        'total_test_images': len(dataset.test) * batch_size,
+        'predicted': predicted_num,
+        'miss_classified': len(epsilons),
+        'epsilon_mean': epsilons.mean()
+    }
+    if pr_trainer is not None:
+        json['pretext_epochs'] = pretext_epochs
+        json['pretext_task'] = pr_trainer
+    _log.info('Test results: {}'.format(json))
+    client = MongoClient(mongo_connection_uri)
+    db = client.iss
+    inserted_id = db.results2.insert_one(json).inserted_id
+    _log.info('inserted_id = {}'.format(inserted_id))
