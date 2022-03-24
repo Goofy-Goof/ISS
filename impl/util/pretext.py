@@ -1,15 +1,12 @@
 from abc import ABC, abstractmethod
 import tensorflow as tf
 from tensorflow.keras import layers
-import logging
 from .config import img_width, img_height
-from functools import reduce, lru_cache
+from functools import reduce
 from itertools import permutations
 from .dataset import load_dataset, resize_ds, configure_ds, Dataset
-from .models import def_metrics, def_loss, basic_model_optimizer, eff_net_optimizer
+from .models import def_metrics, def_loss, def_optimizer
 import numpy as np
-
-_log = logging.getLogger(__name__)
 
 
 class PretextTrainer(ABC):
@@ -19,32 +16,26 @@ class PretextTrainer(ABC):
 
     @staticmethod
     def _replace_output_layer(model, num):
-        if model.name == 'basic_convolutional_network':
-            model.pop()
-            model.add(layers.Dense(num, activation='softmax', name='prediction'))
-            model.compile(optimizer=basic_model_optimizer, loss=def_loss, metrics=def_metrics)
-            return model
         old_layers = model.layers
         # remove last dense from list
         old_layers = old_layers[:-1]
         predictions = layers.Dense(num, activation='softmax', name='prediction')(old_layers[-1].output)
         new_model = tf.keras.Model(inputs=model.inputs, outputs=predictions, name=model.name)
-        new_model.compile(optimizer=eff_net_optimizer, loss=def_loss, metrics=def_metrics)
+        new_model.compile(optimizer=def_optimizer, loss=def_loss, metrics=def_metrics)
         return new_model
 
-    def train_pretrext_task(self, dataset: Dataset, model, device_strategy, epochs):
-        _log.info(f'Training pretext with {self.name}')
+    def train_pretrext_task(self, dataset: Dataset, model, device_strategy, epochs, callbacks_list):
+        print(f'Training pretext with {self.name}')
         ds_train, ds_val = self._create_pretext_dataset(dataset.name)
         with device_strategy.scope():
             p_model = self._replace_output_layer(model, self.pretext_label_num)
-        p_model.fit(ds_train, epochs=epochs, validation_data=ds_val, callbacks=tf.keras.callbacks.TerminateOnNaN())
+        p_model.fit(ds_train, epochs=epochs, validation_data=ds_val, callbacks=callbacks_list)
         with device_strategy.scope():
             og_model = self._replace_output_layer(model, dataset.num_classes)
         return og_model
 
-    @lru_cache(32)
     def _create_pretext_dataset(self, name):
-        _log.info(f'Preparing pretext dataset for {self.name}')
+        print(f'Preparing pretext dataset for {self.name}')
         (train, val), _ = load_dataset(name, ['train[:80%]', 'train[80%:]'])
         train = resize_ds(train)
         val = resize_ds(val)

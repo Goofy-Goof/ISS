@@ -1,10 +1,7 @@
 from tensorflow.keras import layers
 from tensorflow.keras.applications import EfficientNetB0
-import logging
 import tensorflow as tf
-from config import img_width, img_height
-
-_log = logging.getLogger(__name__)
+from .config import img_width, img_height
 
 
 def_loss = tf.keras.losses.SparseCategoricalCrossentropy(from_logits=False)

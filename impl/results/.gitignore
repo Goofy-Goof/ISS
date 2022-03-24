@@ -1,5 +1,4 @@
 .DS_Store
-env.py
 tables/*
 plots/*
 __pycache__

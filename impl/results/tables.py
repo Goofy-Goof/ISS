@@ -17,7 +17,7 @@ def map_pretext_name(x):
         return 'rotation + jigsaw'
 
 
-# replace with real credentials during evaluation
+# replace with real credentials during results
 mongo_uri = os.environ['MONGO_URI']
 db = MongoClient(mongo_uri).iss.results
 

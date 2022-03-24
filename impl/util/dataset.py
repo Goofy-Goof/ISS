@@ -1,9 +1,7 @@
 import tensorflow_datasets as tfds
-from config import data_dir, img_width, img_height, batch_size
+from .config import data_dir, img_width, img_height, batch_size
 import logging
 import tensorflow as tf
-
-_log = logging.getLogger(__name__)
 
 
 def load_dataset(name, split):
@@ -24,7 +22,7 @@ def configure_ds(ds):
 class Dataset:
     def __init__(self, name):
         self.name = name
-        _log.info(f'Loading dataset: {name}')
+        print(f'Loading dataset: {name}')
         self._load_dataset()
 
     @staticmethod
@@ -38,7 +36,7 @@ class Dataset:
         self.test = self._prepare_set(test)
         self.class_names = metadata.features['label'].names
         self.num_classes = metadata.features['label'].num_classes
-        _log.info(
+        print(
             f'Found {(len(self.train) + len(self.val) + len(self.test)) * batch_size} '
             f'datapoints belonging to {self.num_classes} classes:\n'
             f'{self.class_names}\n '
@@ -59,4 +57,5 @@ ds_on_gcs_names = [
 
 
 def create_flowers_ds():
+    print('Creating dataset TF Flowers')
     return Dataset(ds_on_gcs_names[0])

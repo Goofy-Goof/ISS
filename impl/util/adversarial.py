@@ -1,10 +1,8 @@
 import tensorflow as tf
-from utils import predict_batch, add_to_arr
+from .utils import predict_batch, add_to_arr
 import numpy as np
-import logging
 
 epsilons = [0.01, 0.1, 0.15]
-_log = logging.getLogger(__name__)
 
 
 def _create_adversarial_pattern(image: np.ndarray, label: np.ndarray, model):
@@ -37,6 +35,6 @@ def adversarial_round(images: np.ndarray, labels: np.ndarray, model) -> np.ndarr
         labels_under_test = np.delete(labels_under_test, wrong_prediction_indexes)
         if img_under_test.size == 0:
             break
-    _log.info(f'We have managed to fool out network {len(missclassified_epsilons)} times out of {len(labels)} '
+    print(f'We have managed to fool out network {len(missclassified_epsilons)} times out of {len(labels)} '
               f'with average epsilon {np.mean(missclassified_epsilons)}')
     return missclassified_epsilons
