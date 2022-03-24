@@ -12,7 +12,7 @@ import numpy as np
 
 def_callbacks = [
     tf.keras.callbacks.TerminateOnNaN(),
-    tf.keras.callbacks.EarlyStopping(monitor='val_accuracy', patience=5, min_delta=0.01)
+    #tf.keras.callbacks.EarlyStopping(monitor='val_accuracy', patience=5, min_delta=0.01)
 ]
 
 EPOCHS = [10, 20, 30, 40, 50]

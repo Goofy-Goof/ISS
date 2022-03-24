@@ -1,6 +1,6 @@
 import argparse
 from util.tpu import init_tpu
-from util.evaluation import eval_no_pretext, eval_jigsaw, eval_rotation, eval_eff_net_pre_trained
+from util.evaluation import eval_no_pretext, eval_jigsaw, eval_rotation, eval_eff_net_pre_trained, find_opt_down_epochs
 
 OPTIMAL_DOWNSTREAM_EPOCHS = 0
 RETRIES = 5
@@ -27,6 +27,10 @@ def main(task):
         for i in range(RETRIES):
             eval_eff_net_pre_trained(downstream_epochs=OPTIMAL_DOWNSTREAM_EPOCHS, strategy=tpu)
         return
+    if task == 'epochs':
+        tpu = init_tpu()
+        for i in range(RETRIES):
+            find_opt_down_epochs(tpu)
     raise Exception(f'Unknown task {task}')
 
 
