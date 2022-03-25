@@ -1,7 +1,7 @@
 import argparse
 from util.tpu import init_tpu
 from util.evaluation import eval_no_pretext, eval_jigsaw, eval_rotation, eval_eff_net_pre_trained, find_opt_down_epochs
-from util.config import EVALUATION_ITERATIONS, OPTIMAL_DOWNSTREAM_EPOCHS
+from util.config import EVALUATION_ITERATIONS
 
 
 def main(task):
@@ -12,7 +12,7 @@ def main(task):
         for i in range(EVALUATION_ITERATIONS):
             print(f'Iteration -> {i}')
             print('-' * 50)
-            eval_rotation(downstream_epochs=OPTIMAL_DOWNSTREAM_EPOCHS, strategy=tpu)
+            eval_rotation(strategy=tpu)
         return
     if task == 'jigsaw':
         print('Evaluating jigsaw')
@@ -21,7 +21,7 @@ def main(task):
         for i in range(EVALUATION_ITERATIONS):
             print(f'Iteration -> {i}')
             print('-' * 50)
-            eval_jigsaw(downstream_epochs=OPTIMAL_DOWNSTREAM_EPOCHS, strategy=tpu)
+            eval_jigsaw(strategy=tpu)
         return
     if task == 'None':
         print('Evaluating no pretext')
@@ -30,7 +30,7 @@ def main(task):
         for i in range(EVALUATION_ITERATIONS):
             print(f'Iteration -> {i}')
             print('-' * 50)
-            eval_no_pretext(downstream_epochs=OPTIMAL_DOWNSTREAM_EPOCHS, strategy=tpu)
+            eval_no_pretext(strategy=tpu)
         return
     if task == 'transfer':
         print('Evaluating pre-trained EffNet')
@@ -39,7 +39,7 @@ def main(task):
         for i in range(EVALUATION_ITERATIONS):
             print(f'Iteration -> {i}')
             print('-' * 50)
-            eval_eff_net_pre_trained(downstream_epochs=OPTIMAL_DOWNSTREAM_EPOCHS, strategy=tpu)
+            eval_eff_net_pre_trained(strategy=tpu)
         return
     if task == 'epochs':
         print('Evaluating optimal downstream epochs number')
