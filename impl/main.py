@@ -49,6 +49,7 @@ def main(task):
             print(f'Iteration -> {i}')
             print('-' * 50)
             find_opt_down_epochs(tpu)
+        return
     raise Exception(f'Unknown task {task}')
 
 

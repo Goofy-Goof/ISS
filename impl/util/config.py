@@ -9,13 +9,18 @@ TPU_NAME = os.environ['TPU_NAME']
 
 EVALUATION_ITERATIONS = 5
 DOWNSTREAM_EPOCHS = [
-    #10,
-    #20,
-    #30,
-    #40,
-    #50,
+    10,
+    20,
+    30,
+    40,
+    50,
     100
 ]
 
-OPTIMAL_DOWNSTREAM_EPOCHS = 0
-PRETEXT_EPOCHS = []
+OPTIMAL_DOWNSTREAM_EPOCHS = 50
+PRETEXT_EPOCHS = [
+    25,
+    50,
+    75,
+    100
+]

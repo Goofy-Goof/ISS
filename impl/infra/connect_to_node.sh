@@ -1,2 +1,2 @@
 #!/bin/zsh
-gcloud compute ssh node-2 --zone=europe-west4-a
+gcloud compute ssh "$1" --zone=europe-west4-a
