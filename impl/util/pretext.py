@@ -59,8 +59,7 @@ class PretextTrainer(ABC):
 @tf.function
 def rotate(x, y, k):
     """
-    :param x: 4-D Tensor of shape `[batch, height, width, channels]`
-    or 3-D Tensor of shape `[height, width, channels]`.
+    :param x: 4-D Tensor of shape `[batch, height, width, channels]` or 3-D Tensor of shape `[height, width, channels]`.
     :param y: original label of shape `[batch]` or just int
     :param k: A scalar integer tensor. The number of times the image(s) are rotated by 90 degrees.
     :return: Tensor of rotated images, and tensor of new pseudo-labels
@@ -85,18 +84,17 @@ class RotationPretextTrainer(PretextTrainer):
 
 
 @tf.function
-def _make_puzzle(batch, og_label, perm, perm_label):
+def make_puzzle(x, y, perm, perm_label):
     """
-    back in the days, only god and I knew how this function worked, now god is dead and I have have no idea...
-    :param batch: images
-    :param og_label: label in originak batch
-    :param perm: index of permutation
-    :param perm_label: label of genrated permuted batch
-    :return:
+    :param x: 4-D Tensor of shape `[batch, height, width, channels]` or 3-D Tensor of shape `[height, width, channels]`.
+    :param y: original label of shape `[batch]` or just int
+    :param perm: permutation list a.e [2, 3, 4, 1] will create from ['a', 'b', 'c', 'd'] a puzzle ['b', 'c', 'd', 'a']
+    :param perm_label: pseudo label for puzzle
+    :return: Tensor of created puzzles, tensor of pseudo labels
     """
     tile_size = IMG_HEIGHT // 2, IMG_WIDTH // 2
-    image_shape = tf.shape(batch)
-    tile_rows = tf.reshape(batch, [image_shape[0], image_shape[1], -1, tile_size[0], image_shape[3]])
+    image_shape = tf.shape(x)
+    tile_rows = tf.reshape(x, [image_shape[0], image_shape[1], -1, tile_size[0], image_shape[3]])
     serial_tiles = tf.transpose(tile_rows, [0, 2, 1, 3, 4])
     img_parts = tf.reshape(serial_tiles, [image_shape[0], -1, tile_size[0], tile_size[1], image_shape[3]])
     puzzle = tf.convert_to_tensor([img_parts[:, i] for i in perm])
@@ -105,7 +103,7 @@ def _make_puzzle(batch, og_label, perm, perm_label):
     serialized_tiles = tf.reshape(puzzle, [image_shape[0], -1, image_shape[1], tile_width, image_shape[3]])
     rowwise_tiles = tf.transpose(serialized_tiles, [0, 2, 1, 3, 4])
     puzzle = tf.reshape(rowwise_tiles, [image_shape[0], image_shape[1], image_shape[2], image_shape[3]])
-    return puzzle, og_label * 0 + perm_label
+    return puzzle, (y*0 + perm_label)
 
 
 class JigsawPretextTrainer(PretextTrainer):
@@ -121,7 +119,7 @@ class JigsawPretextTrainer(PretextTrainer):
         chosen_perm_index = np.random.choice(range(24), 4)
         chosen_perm = [possible_perm[i] for i in chosen_perm_index]
         for i, perm in enumerate(chosen_perm):
-            train_full.append(train.map(lambda xt, yt: _make_puzzle(xt, yt, perm, i)))
-            val_full.append(val.map(lambda xv, yv: _make_puzzle(xv, yv, perm, i)))
+            train_full.append(train.map(lambda xt, yt: make_puzzle(xt, yt, perm, i)))
+            val_full.append(val.map(lambda xv, yv: make_puzzle(xv, yv, perm, i)))
         pr_train, pr_val = self._concetenate_ds(train_full, val_full)
         return pr_train, pr_val
