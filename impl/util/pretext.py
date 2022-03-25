@@ -57,8 +57,15 @@ class PretextTrainer(ABC):
 
 
 @tf.function
-def _rotate(x, y, k):
-    return x, y * 0 + k
+def rotate(x, y, k):
+    """
+    :param x: 4-D Tensor of shape `[batch, height, width, channels]`
+    or 3-D Tensor of shape `[height, width, channels]`.
+    :param y: original label of shape `[batch]` or just int
+    :param k: A scalar integer tensor. The number of times the image(s) are rotated by 90 degrees.
+    :return: Tensor of rotated images, and tensor of new pseudo-labels
+    """
+    return tf.image.rot90(image=x, k=k), (y*0 + k)
 
 
 class RotationPretextTrainer(PretextTrainer):
@@ -71,8 +78,8 @@ class RotationPretextTrainer(PretextTrainer):
         train_full = []
         val_full = []
         for i in range(4):
-            train_full.append(train.map(lambda xt, yt: _rotate(xt, yt, i)))
-            val_full.append(val.map(lambda xv, yv: _rotate(xv, yv, i)))
+            train_full.append(train.map(lambda xt, yt: rotate(xt, yt, i)))
+            val_full.append(val.map(lambda xv, yv: rotate(xv, yv, i)))
         pr_train, pr_val = self._concetenate_ds(train_full, val_full)
         return pr_train, pr_val
 
