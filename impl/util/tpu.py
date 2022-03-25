@@ -10,7 +10,7 @@ class TpuStub:
 
 
 def init_tpu():
-    print(f'Connecting to {TPU_NAME}')
+    print(f'Connecting to {TPU_NAME} TPU')
     tpu = tf.distribute.cluster_resolver.TPUClusterResolver(tpu=TPU_NAME)  # TPU detection
     print('Running on TPU ', tpu.cluster_spec().as_dict()['worker'])
 
