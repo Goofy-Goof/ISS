@@ -8,10 +8,8 @@ imperceptibly perturbed natural inputs that induce erroneous predictions in stat
 
 
 \paragraph{Research question}
-In this research I would like to evaluate how including state-of-the-art pretext in training process influence N
-Ns vulnerability against adversarial attacks.
-
-
+In this research I would like to evaluate how including state-of-the-art pretext in training process influence
+NNs vulnerability against adversarial attacks.
 
 
 \subsection{Background and Related work}
@@ -36,6 +34,22 @@ The process can be summarised using the following expression:
     adv\_x = x + \epsilon \cdot sign(\nabla_x J(\theta, x, y))
 \end{equation}
 (where $\epsilon$ denotes the intensity of adversarial pattern).
+\\
+\begin{figure}[h]
+    \begin{subfigure}{0.33\textwidth}
+        \caption{Labrador retriever 41.82\% confidence}
+        \includegraphics[width=5cm]{images/labrador}
+    \end{subfigure}
+    \begin{subfigure}{0.33\textwidth}
+        \caption{Adversarial pattern}
+        \includegraphics[width=5cm]{images/adv_pattern}
+    \end{subfigure}
+    \begin{subfigure}{0.3\textwidth}
+        \caption{Weimaraner 15.13\% confidence}
+        \includegraphics[width=5cm]{images/adv_labrador}
+    \end{subfigure}
+    \caption{An example how adversarial attack using FGSM could look like}
+\end{figure}
 
 \paragraph{Pretext task}
 Pretext task is the self-supervised learning task solved to learn visual representations,
@@ -58,9 +72,6 @@ Intuitively, a good model should learn to recognize canonical orientations of ob
 The task is to recover relative spatial position of 4 sampled image patches after a random permutation of these patches was performed.
 ~\cite{kolesnikov2019revisiting}
 All of these patches are concatenated in 'puzzle' image, which is later sent through same network, which needs to predict a permutation applied.
-In practice, 4 out of 24 possible permutations were used.
-
-
 
 
 \section{Methods}
@@ -69,16 +80,16 @@ In practice, 4 out of 24 possible permutations were used.
 \paragraph{Rotation pretext task}
 Each image from original dataset was rotated 0°,90°,180°,270° and assigned new pseudo label:
 \begin{itemize}
-    \item 0° \textrightarrow 0
-    \item 90° \textrightarrow 1
-    \item 180° \textrightarrow 2
-    \item 270° \textrightarrow 3
+    \item 0° \textrightarrow \; 0
+    \item 90° \textrightarrow \; 1
+    \item 180° \textrightarrow \; 2
+    \item 270° \textrightarrow \; 3
 \end{itemize}
 all 4 batches of rotated images were concatenated in dataset, and shuffled.
 Then last dense layer of NN was replaced with dense layer for corresponding number of pseudo classes (4).
 Then same model was then trained to identify rotation applied.
 \\
-\begin{figure}[!htp]
+\begin{figure}[h]
     \begin{subfigure}{0.33\textwidth}
         \caption{Label = 0}
         \includegraphics[width=5cm]{images/rot_0}
@@ -91,13 +102,17 @@ Then same model was then trained to identify rotation applied.
         \caption{Label = 2}
         \includegraphics[width=5cm]{images/rot_2}
     \end{subfigure}
+    \caption{An example how images used for rotation pretext task could look like}
 \end{figure}
 
 \paragraph{Jigsaw pretext task}
-For jigsaw I have adopted similar approach as described by Mehdi Noroozi and Paolo Favaro~\cite{DBLP:journals/corr/NorooziF16}.
-Image was cut in 4 equal parts, 4 out of 24 possible premutations were chosen for each batch.
+For jigsaw similar approach as described by Mehdi Noroozi and Paolo Favaro~\cite{DBLP:journals/corr/NorooziF16} was adopted.
+Random 4 out of 24 possible permutations were chosen for each batch.
 (number of possible permutation can be obtained from Newtonian binomial $P=\frac{r!}{(r-n)!}$).
-Similarly to rotation pseudo labels in [0\ldots23] have been assigned, data was shuffled and dense layer was replaced by suitable one.
+For each permutation each image was cut in 4 equal parts, they were afterwards permuted according to chosen permutation,
+and concatenated in 1 image afterwards.
+For detailed implementation please refer to \href{https://github.com/Goofy-Goof/ISS/blob/33a2ad40b779ff230aae31c29d2edc2cf5d90406/impl/util/pretext.py}{GitHub/pretext.py}.
+Similarly to rotation pseudo labels in [0\ldots23] have been assigned, images were shuffled and dense layer was replaced by suitable one.
 The network then is trained to identify permutation applied.
 \\
 \begin{figure}
@@ -109,47 +124,39 @@ The network then is trained to identify permutation applied.
         \includegraphics[width=3cm]{images/arrow}
     \end{subfigure}
     \begin{subfigure}{0.33\textwidth}
-        \caption{Generated puzzle, with label=1}
+        \caption{Generated puzzle, label=1}
         \includegraphics[width=5cm]{images/puzzle}
     \end{subfigure}
+    \caption{An example how puzzle for jigsaw pretext task could look like}
 \end{figure}
 
 \paragraph{Adversarial Images with FGSM}
-My implementation of FGSM is based on \href{https://www.tensorflow.org/tutorials/generative/adversarial_fgsm}{TF FGSM}.
+My implementation of FGSM was based on \href{https://www.tensorflow.org/tutorials/generative/adversarial_fgsm}{TF FGSM}.
 In order to generate adversarial pattern for each image, gradient of loss function is evaluated with sign for each image.
-Then it's overlapped with original image with $\epsilon$ in [0.01, 0.1, 0.15], as any higher values make the image visually disrupted
-for human viewer(like me).
-\\
-\begin{figure}[!h]
-    \begin{subfigure}{0.33\textwidth}
-        \caption{Labrador retriever 41.82\% confidence}
-        \includegraphics[width=5cm]{images/labrador}
-    \end{subfigure}
-    \begin{subfigure}{0.33\textwidth}
-        \caption{Adversarial pattern}
-        \includegraphics[width=5cm]{images/adv_pattern}
-    \end{subfigure}
-    \begin{subfigure}{0.3\textwidth}
-        \caption{Weimaraner 15.13\% confidence}
-        \includegraphics[width=5cm]{images/adv_labrador}
-    \end{subfigure}
-\end{figure}
+Then according to this formula:
+\begin{equation}
+    adv\_x = x + \epsilon \cdot sign(\nabla_x J(\theta, x, y))
+\end{equation}
+pattern was then added pixel wise to original image with $\epsilon$ varying in [0.01, 0.1, 0.15]
+(any higher values make the image visually disrupted for human viewer).
+Resulting adversarial image was then clipped by value, so each pixel value stays in interval [0\ldots255],
+as required for RGB color encoding.
+For detailed implementation please refer to \href{https://github.com/Goofy-Goof/ISS/blob/33a2ad40b779ff230aae31c29d2edc2cf5d90406/impl/util/adversarial.py}{GitHub/adversarial.py}
+
 
 \paragraph{Evaluation approach}
 In order to evaluate, how including pretext task in training process influences NNs vulnerability against adversarial attacks,
-I have measured intensity of adversarial pattern needed to make NN miss classify (Further denoted with epsilon or $\epsilon$).
-\newline
+Intensity of adversarial pattern needed to make NN miss classify (Further denoted with epsilon or $\epsilon$) was measured.
+\\
 5\% of dataset were reserved for experiment.
-During each evaluation round NN network was trained with either none, rotation, jigsaw, or both, pretext tasks.
-Number of training epochs was varied in [10, 20, 30, 50] for pretext and downstream task.
+During each evaluation round NN network was trained with rotation or jigsaw pretext task.
+Number of training epochs was varied in [25, 50, 75, 100] for pretext training, Number of epochs for downstream training was set to 50.
 \\
-Reserved images were \st{fed} to NN, the ones which were correctly classified saved.
-Then each of saved (previously correctly classified images) was overlapped with adversarial pattern generated for it.
-If classification was still correct $\epsilon$ value was increased.
+Reserved images were given to NN, the ones which were correctly classified saved.
+Then for each of saved (previously correctly classified images) adversarial image was created using FGSM with $\epsilon = 0.01$.
+If classification was still correct $\epsilon$ value was increased first to $\epsilon = 0.1$, then again increased to $\epsilon = 0.15$ if needed.
+The smallest value needed to cause miss-classification was saved.
 \\
-The smallest value needed to cause miss classification was saved.
-$\overline{\epsilon}$ was compared for different values of pretext training epochs, downstream training epochs,
-and kinds of pretext tasks.
-\\
-In order to compare how pretext tasks preform in comparison with other popular state of the art pre-training technics perform,
-I will also compare EffNet trained with pretext tasks by myself with EffNet pre-trained on ImageNet utilized in transfer learning manner.
+$\overline{\epsilon}$ was compared for different values of pretext training epochs and kinds of pretext tasks.
+In order to compare how pretext tasks perform in comparison with other popular state of the art pre-training technics perform,
+the result were compared with EffNet trained for 50 epochs without pretext task and EffNet pre-trained for image classification on ImageNet.
