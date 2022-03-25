@@ -1,6 +1,9 @@
 import os
 
-img_height = 224
-img_width = 224
-batch_size = 128
-mongo_connection_uri = os.environ['MONGO_URI']
+IMG_HEIGHT = 224
+IMG_WIDTH = 224
+BATCH_SIZE = 128
+MONGO_URI = os.environ['MONGO_URI']
+TPU_NAME = os.environ['TPU_NAME']
+OPTIMAL_DOWNSTREAM_EPOCHS = 0
+EVALUATION_ITERATIONS = 5

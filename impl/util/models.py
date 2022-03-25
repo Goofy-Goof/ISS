@@ -1,7 +1,7 @@
 from tensorflow.keras import layers
 from tensorflow.keras.applications import EfficientNetB0
 import tensorflow as tf
-from .config import img_width, img_height
+from .config import IMG_WIDTH, IMG_HEIGHT
 
 
 def_loss = tf.keras.losses.SparseCategoricalCrossentropy(from_logits=False)
@@ -13,7 +13,7 @@ eff_net_transfer_optimizer = tf.keras.optimizers.Adam(learning_rate=1e-2)
 def create_eff_net_pre_trained(num_classes, device_strategy):
     print('Creating EfficientNetB0 pre-trained')
     with device_strategy.scope():
-        inputs = layers.Input(shape=(img_height, img_width, 3))
+        inputs = layers.Input(shape=(IMG_HEIGHT, IMG_WIDTH, 3))
         conv_base = EfficientNetB0(include_top=False, weights='imagenet', input_tensor=inputs)
         conv_base.trainable = False
         # Rebuild top

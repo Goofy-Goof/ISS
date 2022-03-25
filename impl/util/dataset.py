@@ -1,16 +1,16 @@
 import tensorflow_datasets as tfds
-from .config import img_width, img_height, batch_size
+from .config import IMG_WIDTH, IMG_HEIGHT, BATCH_SIZE
 import tensorflow as tf
 
 
 def load_dataset(name, split):
     return tfds.load(name=name, split=split, try_gcs=True, as_supervised=True,
-                     with_info=True, batch_size=batch_size)
+                     with_info=True, batch_size=BATCH_SIZE)
 
 
 def resize_ds(ds):
     return ds.map(
-        lambda x, y: (tf.image.resize(x, (img_height, img_width)), y)
+        lambda x, y: (tf.image.resize(x, (IMG_HEIGHT, IMG_WIDTH)), y)
     )
 
 
@@ -36,11 +36,11 @@ class Dataset:
         self.class_names = metadata.features['label'].names
         self.num_classes = metadata.features['label'].num_classes
         print(
-            f'Found {(len(self.train) + len(self.val) + len(self.test)) * batch_size} '
+            f'Found {(len(self.train) + len(self.val) + len(self.test)) * BATCH_SIZE} '
             f'datapoints belonging to {self.num_classes} classes:\n'
             f'{self.class_names}\n '
-            f'Using {len(self.train) * batch_size} for training, {len(self.val) * batch_size} '
-            f'for validation, and reserved {len(self.test) * batch_size} for testing'
+            f'Using {len(self.train) * BATCH_SIZE} for training, {len(self.val) * BATCH_SIZE} '
+            f'for validation, and reserved {len(self.test) * BATCH_SIZE} for testing'
         )
 
 

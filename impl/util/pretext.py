@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 import tensorflow as tf
 from tensorflow.keras import layers
-from .config import img_width, img_height
+from .config import IMG_WIDTH, IMG_HEIGHT
 from functools import reduce
 from itertools import permutations
 from .dataset import load_dataset, resize_ds, configure_ds, Dataset
@@ -87,7 +87,7 @@ def _make_puzzle(batch, og_label, perm, perm_label):
     :param perm_label: label of genrated permuted batch
     :return:
     """
-    tile_size = img_height // 2, img_width // 2
+    tile_size = IMG_HEIGHT // 2, IMG_WIDTH // 2
     image_shape = tf.shape(batch)
     tile_rows = tf.reshape(batch, [image_shape[0], image_shape[1], -1, tile_size[0], image_shape[3]])
     serial_tiles = tf.transpose(tile_rows, [0, 2, 1, 3, 4])

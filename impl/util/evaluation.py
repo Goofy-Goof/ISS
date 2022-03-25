@@ -7,7 +7,7 @@ from .pretext import PretextTrainer, RotationPretextTrainer, JigsawPretextTraine
 from .utils import prediction_round
 from .adversarial import adversarial_round
 from datetime import datetime
-from .config import batch_size, mongo_connection_uri
+from .config import BATCH_SIZE, MONGO_URI
 import numpy as np
 
 def_callbacks = [
@@ -94,7 +94,7 @@ def persist_result(model_name, dataset, start, end, downstream_epochs, pretext_e
         'from': start,
         'until': end,
         'downstream_epochs': downstream_epochs,
-        'total_test_images': len(dataset.test) * batch_size,
+        'total_test_images': len(dataset.test) * BATCH_SIZE,
         'predicted': predicted_num,
         'miss_classified': len(epsilons),
         'epsilon_mean': np.mean(epsilons)
@@ -103,7 +103,7 @@ def persist_result(model_name, dataset, start, end, downstream_epochs, pretext_e
         json['pretext_epochs'] = pretext_epochs
         json['pretext_task'] = pr_trainer
     print('Test results: {}'.format(json))
-    client = MongoClient(mongo_connection_uri)
+    client = MongoClient(MONGO_URI)
     db = client.iss
     inserted_id = db.results2.insert_one(json).inserted_id
     print('inserted_id = {}'.format(inserted_id))
@@ -116,11 +116,11 @@ def persist_downstream_epochs_result(model_name, dataset, start, end, downstream
         'from': start,
         'until': end,
         'downstream_epochs': downstream_epochs,
-        'total_test_images': len(dataset.test) * batch_size,
+        'total_test_images': len(dataset.test) * BATCH_SIZE,
         'predicted': predicted_num,
     }
     print('Test results: {}'.format(json))
-    client = MongoClient(mongo_connection_uri)
+    client = MongoClient(MONGO_URI)
     db = client.iss
     inserted_id = db.down_epochs_res.insert_one(json).inserted_id
     print('inserted_id = {}'.format(inserted_id))

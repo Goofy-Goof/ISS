@@ -1,35 +1,38 @@
 import argparse
 from util.tpu import init_tpu
 from util.evaluation import eval_no_pretext, eval_jigsaw, eval_rotation, eval_eff_net_pre_trained, find_opt_down_epochs
-
-OPTIMAL_DOWNSTREAM_EPOCHS = 0
-RETRIES = 5
+from util.config import EVALUATION_ITERATIONS, OPTIMAL_DOWNSTREAM_EPOCHS
 
 
 def main(task):
     if task == 'rotation':
         tpu = init_tpu()
-        for i in range(RETRIES):
+        for i in range(EVALUATION_ITERATIONS):
+            print(f'iteration -> {i}')
             eval_rotation(downstream_epochs=OPTIMAL_DOWNSTREAM_EPOCHS, strategy=tpu)
         return
     if task == 'jigsaw':
         tpu = init_tpu()
-        for i in range(RETRIES):
+        for i in range(EVALUATION_ITERATIONS):
+            print(f'iteration -> {i}')
             eval_jigsaw(downstream_epochs=OPTIMAL_DOWNSTREAM_EPOCHS, strategy=tpu)
         return
     if task == 'None':
         tpu = init_tpu()
-        for i in range(RETRIES):
+        for i in range(EVALUATION_ITERATIONS):
+            print(f'iteration -> {i}')
             eval_no_pretext(downstream_epochs=OPTIMAL_DOWNSTREAM_EPOCHS, strategy=tpu)
         return
     if task == 'transfer':
         tpu = init_tpu()
-        for i in range(RETRIES):
+        for i in range(EVALUATION_ITERATIONS):
+            print(f'iteration -> {i}')
             eval_eff_net_pre_trained(downstream_epochs=OPTIMAL_DOWNSTREAM_EPOCHS, strategy=tpu)
         return
     if task == 'epochs':
         tpu = init_tpu()
-        for i in range(RETRIES):
+        for i in range(EVALUATION_ITERATIONS):
+            print(f'iteration -> {i}')
             find_opt_down_epochs(tpu)
     raise Exception(f'Unknown task {task}')
 

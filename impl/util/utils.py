@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from .dataset import Dataset
-from .config import batch_size
+from .config import BATCH_SIZE
 import tensorflow as tf
 
 
@@ -45,5 +45,5 @@ def prediction_round(dataset: Dataset, model) -> (np.ndarray, np.ndarray):
         correct_prediction_indexes = np.argwhere(predicted_labels == label_batch).flatten()
         correct_predicted_images = add_to_arr(correct_predicted_images, img_batch.numpy()[correct_prediction_indexes])
         correct_predicted_labels = add_to_arr(correct_predicted_labels, label_batch.numpy()[correct_prediction_indexes])
-    print(f'{len(correct_predicted_labels)} out of {len(data) * batch_size} have been correctly classified')
+    print(f'{len(correct_predicted_labels)} out of {len(data) * BATCH_SIZE} have been correctly classified')
     return correct_predicted_images, correct_predicted_labels
