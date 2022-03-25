@@ -99,7 +99,7 @@ def persist_result(model_name, dataset, start, end, downstream_epochs, pretext_e
     }
     if pr_trainer is not None:
         json['pretext_epochs'] = pretext_epochs
-        json['pretext_task'] = pr_trainer
+        json['pretext_task'] = pr_trainer.name
     print('Test results: {}'.format(json))
     client = MongoClient(MONGO_URI)
     db = client.iss

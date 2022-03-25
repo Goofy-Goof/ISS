@@ -62,7 +62,7 @@ def _rotate(x, y, k):
 
 
 class RotationPretextTrainer(PretextTrainer):
-    name = 'RotationPretextTrainer'
+    name = 'rotation'
 
     def __init__(self):
         super().__init__(4)
@@ -102,7 +102,7 @@ def _make_puzzle(batch, og_label, perm, perm_label):
 
 
 class JigsawPretextTrainer(PretextTrainer):
-    name = 'JigsawPretextTrainer'
+    name = 'jigsaw'
 
     def __init__(self):
         super().__init__(24)
