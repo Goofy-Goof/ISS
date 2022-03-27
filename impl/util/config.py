@@ -1,4 +1,5 @@
 import os
+from numpy import linspace
 
 IMG_HEIGHT = 224
 IMG_WIDTH = 224
@@ -23,3 +24,5 @@ PRETEXT_EPOCHS = [
     75,
     100
 ]
+
+EPSILONS = linspace(start=0.01, stop=0.1, num=19)
