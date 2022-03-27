@@ -103,7 +103,7 @@ def persist_result(model_name, dataset, start, end, downstream_epochs, pretext_e
     print('Test results: {}'.format(json))
     client = MongoClient(MONGO_URI)
     db = client.iss
-    inserted_id = db.results2.insert_one(json).inserted_id
+    inserted_id = db.results3.insert_one(json).inserted_id
     print('inserted_id = {}'.format(inserted_id))
 
 
@@ -120,5 +120,5 @@ def persist_downstream_epochs_result(model_name, dataset, start, end, downstream
     print('Test results: {}'.format(json))
     client = MongoClient(MONGO_URI)
     db = client.iss
-    inserted_id = db.down_epochs_res.insert_one(json).inserted_id
+    inserted_id = db.results3.insert_one(json).inserted_id
     print('inserted_id = {}'.format(inserted_id))
