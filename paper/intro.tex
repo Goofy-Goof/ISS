@@ -2,14 +2,14 @@
 
 
 \paragraph{Motivation}
-It’s widely known fact that NN are vulnerable against adversarial images.
-~\cite{ilyas2019adversarial} "Particularly worrisome is the phenomenon of adversarial examples,
-imperceptibly perturbed natural inputs that induce erroneous predictions in state-of-the-art classifiers."
-
-
-\paragraph{Research question}
-In this research I would like to evaluate how including state-of-the-art pretext in training process influence
+\begin{itemize}
+    \item in recent years NN for image classififcation has evolved a lot
+    \item it's researches obligation to ensure NN robustness and reliability
+    \item It’s widely known fact that NN are vulnerable against adversarial attacks. ~\cite{ilyas2019adversarial}
+    \item pretect tasks had shown themsef usefull to improve accuracvy, andf also are belived to contribute to models learnig of important features
+    \item so, In this research I would like to evaluate how including state-of-the-art pretext in training process influence
 NNs vulnerability against adversarial attacks.
+\end{itemize}
 
 
 \subsection{Background and Related work}
@@ -36,19 +36,23 @@ The process can be summarised using the following expression:
 (where $\epsilon$ denotes the intensity of adversarial pattern).
 \\
 \begin{figure}[h]
-    \begin{subfigure}{0.33\textwidth}
-        \caption{Labrador retriever 41.82\% confidence}
-        \includegraphics[width=5cm]{images/labrador}
+    \begin{subfigure}{0.4\textwidth}
+        \caption{Tulips 40\% confidence}
+        \includegraphics[width=7cm]{images/og_image}
     \end{subfigure}
-    \begin{subfigure}{0.33\textwidth}
-        \caption{Adversarial pattern}
-        \includegraphics[width=5cm]{images/adv_pattern}
+    \begin{subfigure}{0.4\textwidth}
+        \caption{Adversarial pattern for this image}
+        \includegraphics[width=7cm]{images/adv_pattern}
     \end{subfigure}
-    \begin{subfigure}{0.3\textwidth}
-        \caption{Weimaraner 15.13\% confidence}
-        \includegraphics[width=5cm]{images/adv_labrador}
+    \\
+    \begin{subfigure}{0.4\textwidth}
+        \caption{$\epsilon = 0.01$, Roses 40\% confidence}
+        \includegraphics[width=7cm]{images/adv_attack_001}
     \end{subfigure}
-    \caption{An example how adversarial attack using FGSM could look like}
+    \begin{subfigure}{0.4\textwidth}
+        \caption{$\epsilon = 0.1$, Roses 40\% confidence}
+        \includegraphics[width=7cm]{images/adv_attack_01}
+    \end{subfigure}
 \end{figure}
 
 \paragraph{Pretext task}

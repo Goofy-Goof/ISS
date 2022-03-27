@@ -15,6 +15,12 @@ def show_image(img: np.ndarray):
     plt.show()
 
 
+def save_image(img, name):
+    plt.imshow(img.astype('uint8'))
+    plt.axis("off")
+    plt.savefig(name)
+
+
 def predict_batch(img: np.ndarray, model) -> np.ndarray:
     """
     :param img: batch of images
@@ -22,10 +28,15 @@ def predict_batch(img: np.ndarray, model) -> np.ndarray:
     :param class_names: names of classes
     :return: batch of predicted labes
     """
+    return predict_batch_with_probs(img, model)[0]
+
+
+def predict_batch_with_probs(img: np.ndarray, model):
     predictions_batch = model.predict(img)
     score_batch = tf.nn.softmax(predictions_batch)
     label_batch = np.argmax(score_batch, axis=1)
-    return label_batch
+    probs = np.max(score_batch, axis=1)
+    return label_batch, probs
 
 
 def add_to_arr(target_arr: np.ndarray, elements: np.ndarray, axis=0):
@@ -47,3 +58,7 @@ def prediction_round(dataset: Dataset, model) -> (np.ndarray, np.ndarray):
         correct_predicted_labels = add_to_arr(correct_predicted_labels, label_batch.numpy()[correct_prediction_indexes])
     print(f'{len(correct_predicted_labels)} out of {len(data) * BATCH_SIZE} have been correctly classified')
     return correct_predicted_images, correct_predicted_labels
+
+
+def decode_label(ds: Dataset, label: int):
+    return ds.class_names[label]
