@@ -2,7 +2,7 @@ import tensorflow as tf
 from .utils import predict_batch, add_to_arr
 import numpy as np
 
-epsilons = [0.01, 0.1, 0.15]
+epsilons = np.linspace(start=0.01, stop=0.1, num=19)
 
 
 def eval_signed_grad_batch(image: np.ndarray, label: np.ndarray, model):
