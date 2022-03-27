@@ -4,12 +4,14 @@ from util.evaluation import eval_no_pretext, eval_jigsaw, eval_rotation, eval_ef
 from util.config import EVALUATION_ITERATIONS
 
 
-def main(task):
+def main(task, iterations):
+    if iterations is None:
+        iterations = EVALUATION_ITERATIONS
     if task == 'rotation':
         tpu = init_tpu()
         print('Evaluating rotation')
         print('-' * 50)
-        for i in range(EVALUATION_ITERATIONS):
+        for i in range(iterations):
             print(f'Iteration -> {i}')
             print('-' * 50)
             eval_rotation(strategy=tpu)
@@ -18,7 +20,7 @@ def main(task):
         print('Evaluating jigsaw')
         print('-' * 50)
         tpu = init_tpu()
-        for i in range(EVALUATION_ITERATIONS):
+        for i in range(iterations):
             print(f'Iteration -> {i}')
             print('-' * 50)
             eval_jigsaw(strategy=tpu)
@@ -27,7 +29,7 @@ def main(task):
         print('Evaluating no pretext')
         print('-' * 50)
         tpu = init_tpu()
-        for i in range(EVALUATION_ITERATIONS):
+        for i in range(iterations):
             print(f'Iteration -> {i}')
             print('-' * 50)
             eval_no_pretext(strategy=tpu)
@@ -36,7 +38,7 @@ def main(task):
         print('Evaluating pre-trained EffNet')
         print('-' * 50)
         tpu = init_tpu()
-        for i in range(EVALUATION_ITERATIONS):
+        for i in range(iterations):
             print(f'Iteration -> {i}')
             print('-' * 50)
             eval_eff_net_pre_trained(strategy=tpu)
@@ -45,7 +47,7 @@ def main(task):
         print('Evaluating optimal downstream epochs number')
         print('-' * 50)
         tpu = init_tpu()
-        for i in range(EVALUATION_ITERATIONS):
+        for i in range(iterations):
             print(f'Iteration -> {i}')
             print('-' * 50)
             find_opt_down_epochs(tpu)
@@ -58,5 +60,6 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Optional app description')
     # Switch
     parser.add_argument('task', type=str, help='Evaluation task type')
+    parser.add_argument('--iterations', type=int, help='Iterations to eval')
     args = parser.parse_args()
-    main(args.task)
+    main(args.task, args.iterations)
