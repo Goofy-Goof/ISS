@@ -1,6 +1,65 @@
 \section{Results}
 
+\begin{table}[h]
+    \begin{tabular}{|r|r|r|r|}
+        \hline
+        Pretext epochs & Accuracy, \% & Miss classification rate, \% & $\overline{\epsilon}$ \\
+        \hline
+        25             & 43.984       & 95.915                       & 0.012                 \\
+        50             & 43.438       & 97.482                       & 0.011                 \\
+        \rowcolor{yellow}
+        75             & 43.281       & 93.141                       & 0.013                 \\
+        100            & 42.188       & 95.000                       & 0.012                 \\
+        \hline
+    \end{tabular}
+    \caption{\label{tab:table-1}Results for jigsaw pretext task}
+\end{table}
 
+
+
+\begin{table}[h]
+    \begin{tabular}{|r|r|r|r|}
+        \hline
+        Pretext epochs & Accuracy, \% & Miss classification rate, \% & $\overline{\epsilon}$ \\
+        \hline
+        25             & 44.219       & 96.643                       & 0.012                 \\
+        50             & 44.141       & 97.876                       & 0.012                 \\
+        \rowcolor{yellow}
+        75             & 46.953       & 95.674                       & 0.012                 \\
+        100            & 44.531       & 97.544                       & 0.012                 \\
+        \hline
+    \end{tabular}
+    \caption{\label{tab:table-2}Results for rotation pretext task}
+\end{table}
+
+\begin{table}[h]
+    \begin{tabular}{|r|r|r|r|}
+        \hline
+        Pretext task\textbackslash Pre-training & Accuracy, \% & Miss classification rate, \% & $\overline{\epsilon}$ \\
+        \hline
+        ImageNet                                & 65.156       & 94.245                       & 0.024                 \\
+        None                                    & 39.922       & 99.413                       & 0.011                 \\
+        rotation                                & 46.953       & 95.674                       & 0.012                 \\
+        jigsaw                                  & 43.984       & 93.141                       & 0.013                 \\
+        \hline
+    \end{tabular}
+    \caption{\label{tab:table-3}Comparison of best results among different pretext tasks, pre-training}
+\end{table}
+
+\begin{figure}
+    \includegraphics{images/acc}
+    \caption{\label{fig:figure-1}Accuracy comparison}
+\end{figure}
+
+\begin{figure}
+    \includegraphics{images/miss_rate}
+    \caption{\label{fig:figure-2}Miss rate comparison}
+\end{figure}
+
+\begin{figure}
+    \includegraphics{images/epsilon}
+    \caption{\label{fig:figure-3}$\overline{\epsilon}$ comparison}
+\end{figure}
 
 
 

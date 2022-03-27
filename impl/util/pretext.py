@@ -108,6 +108,7 @@ def make_puzzle(x, y, perm, perm_label):
 
 class JigsawPretextTrainer(PretextTrainer):
     name = 'jigsaw'
+    possible_perm = list(permutations([0, 1, 2, 3]))
 
     def __init__(self):
         super().__init__(24)
@@ -115,9 +116,8 @@ class JigsawPretextTrainer(PretextTrainer):
     def _map_to_pretext_dataset(self, train, val):
         train_full = []
         val_full = []
-        possible_perm = list(permutations([0, 1, 2, 3]))
         chosen_perm_index = np.random.choice(range(24), 4)
-        chosen_perm = [possible_perm[i] for i in chosen_perm_index]
+        chosen_perm = [self.possible_perm[i] for i in chosen_perm_index]
         for i, perm in enumerate(chosen_perm):
             train_full.append(train.map(lambda xt, yt: make_puzzle(xt, yt, perm, i)))
             val_full.append(val.map(lambda xv, yv: make_puzzle(xv, yv, perm, i)))
