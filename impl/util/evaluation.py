@@ -7,12 +7,12 @@ from .pretext import PretextTrainer, RotationPretextTrainer, JigsawPretextTraine
 from .utils import prediction_round
 from .adversarial import adversarial_round
 from datetime import datetime
-from .config import BATCH_SIZE, MONGO_URI, DOWNSTREAM_EPOCHS, OPTIMAL_DOWNSTREAM_EPOCHS, PRETEXT_EPOCHS
+from .config import BATCH_SIZE, MONGO_URI
 import numpy as np
 
 def_callbacks = [
     tf.keras.callbacks.TerminateOnNaN(),
-    #tf.keras.callbacks.EarlyStopping(monitor='val_accuracy', patience=5, min_delta=0.01)
+    # tf.keras.callbacks.EarlyStopping(monitor='val_accuracy', patience=5, min_delta=0.01)
 ]
 
 
@@ -28,8 +28,8 @@ def freeze_conv_layers(model):
     return model
 
 
-def find_opt_down_epochs(strategy):
-    for ep in DOWNSTREAM_EPOCHS:
+def find_opt_down_epochs(strategy, down_epochs):
+    for ep in down_epochs:
         start = datetime.now()
         ds = create_flowers_ds()
         NN = create_eff_net_trainable(ds.num_classes, strategy)
@@ -41,26 +41,26 @@ def find_opt_down_epochs(strategy):
                                          downstream_epochs=ep, predicted_num=len(pred_label))
 
 
-def eval_no_pretext(strategy):
+def eval_no_pretext(strategy, downstream_epochs):
     _eval_round(model_constr=create_eff_net_trainable, strategy=strategy, pr_task=None, pr_epochs=None,
-                downstream_epochs=OPTIMAL_DOWNSTREAM_EPOCHS)
+                downstream_epochs=downstream_epochs)
 
 
-def eval_eff_net_pre_trained(strategy):
+def eval_eff_net_pre_trained(strategy, downstream_epochs):
     _eval_round(model_constr=create_eff_net_pre_trained, strategy=strategy, pr_task=None,
-                pr_epochs=None, downstream_epochs=OPTIMAL_DOWNSTREAM_EPOCHS)
+                pr_epochs=None, downstream_epochs=downstream_epochs)
 
 
-def eval_rotation(strategy):
-    for i in PRETEXT_EPOCHS:
+def eval_rotation(strategy, pretext_epochs, downstream_epochs):
+    for i in pretext_epochs:
         _eval_round(model_constr=create_eff_net_trainable, strategy=strategy, pr_task=RotationPretextTrainer(),
-                    pr_epochs=i, downstream_epochs=OPTIMAL_DOWNSTREAM_EPOCHS)
+                    pr_epochs=i, downstream_epochs=downstream_epochs)
 
 
-def eval_jigsaw(strategy):
-    for i in PRETEXT_EPOCHS:
+def eval_jigsaw(strategy, pretext_epochs, downstream_epochs):
+    for i in pretext_epochs:
         _eval_round(model_constr=create_eff_net_trainable, strategy=strategy, pr_task=JigsawPretextTrainer(),
-                    pr_epochs=i, downstream_epochs=OPTIMAL_DOWNSTREAM_EPOCHS)
+                    pr_epochs=i, downstream_epochs=downstream_epochs)
 
 
 def _eval_round(model_constr, strategy, pr_task: Optional[PretextTrainer], pr_epochs, downstream_epochs):
