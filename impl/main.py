@@ -97,5 +97,5 @@ if __name__ == '__main__':
         iterations=args.iterations,
         pretext_epochs=args.pretext_epochs,
         downstream_epochs=args.downstream_epochs,
-        opt_downstream_ep=args.optimal_downstream_epochs
+        opt_downstream_ep=args.opt_downstream_epochs
     )

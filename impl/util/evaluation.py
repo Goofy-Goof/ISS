@@ -12,13 +12,12 @@ import numpy as np
 
 def_callbacks = [
     tf.keras.callbacks.TerminateOnNaN(),
-    # tf.keras.callbacks.EarlyStopping(monitor='val_accuracy', patience=5, min_delta=0.01)
+    # tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=5, min_delta=0.01)
+    tf.keras.callbacks.ReduceLROnPlateau(monitor='val_loss', factor=0.2, patience=5, verbose=1, min_lr=1e-5)
 ]
 
 
 def freeze_conv_layers(model):
-    if model.name == 'efficient_net_frozen':
-        return model
     # Freezing the Convolutional Layers while keeping Dense layers as Trainable
     for layer in model.layers:
         if str(layer.name).find('conv') == -1:

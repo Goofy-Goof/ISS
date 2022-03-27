@@ -3,14 +3,13 @@
 
 \paragraph{Motivation}
 \begin{itemize}
-    \item in recent years NN for image classififcation has evolved a lot
-    \item it's researches obligation to ensure NN robustness and reliability
-    \item It’s widely known fact that NN are vulnerable against adversarial attacks. ~\cite{ilyas2019adversarial}
-    \item pretect tasks had shown themsef usefull to improve accuracvy, andf also are belived to contribute to models learnig of important features
-    \item so, In this research I would like to evaluate how including state-of-the-art pretext in training process influence
-NNs vulnerability against adversarial attacks.
+    \item In recent years NN for image classification had a lot of successes.
+    \item It's researches obligation to ensure NN robustness and reliability of NNs.
+    \item It’s widely known fact that NN are vulnerable against adversarial attacks~\cite{ilyas2019adversarial}.
+    \item Pretext tasks had shown themselves usefully to improve accuracy~\cite{kolesnikov2019revisiting}.
+    \item In this research I would like to evaluate how including state-of-the-art pretext tasks in training
+    process influences NNs vulnerability against adversarial attacks.
 \end{itemize}
-
 
 \subsection{Background and Related work}
 
@@ -141,7 +140,7 @@ Then according to this formula:
 \begin{equation}
     adv\_x = x + \epsilon \cdot sign(\nabla_x J(\theta, x, y))
 \end{equation}
-pattern was then added pixel wise to original image with $\epsilon$ varying in [0.01, 0.1, 0.15]
+pattern was then added pixel wise to original image with $\epsilon$ varying in [0.01\ldots0.1]
 (any higher values make the image visually disrupted for human viewer).
 Resulting adversarial image was then clipped by value, so each pixel value stays in interval [0\ldots255],
 as required for RGB color encoding.
@@ -158,8 +157,8 @@ Number of training epochs was varied in [25, 50, 75, 100] for pretext training, 
 \\
 Reserved images were given to NN, the ones which were correctly classified saved.
 Then for each of saved (previously correctly classified images) adversarial image was created using FGSM with $\epsilon = 0.01$.
-If classification was still correct $\epsilon$ value was increased first to $\epsilon = 0.1$, then again increased to $\epsilon = 0.15$ if needed.
-The smallest value needed to cause miss-classification was saved.
+If classification was still correct $\epsilon$ value was increased by 0.005.
+This was repeated until NN produced false classification or $\epsilon$ reached value of 0.1
 \\
 $\overline{\epsilon}$ was compared for different values of pretext training epochs and kinds of pretext tasks.
 In order to compare how pretext tasks perform in comparison with other popular state of the art pre-training technics perform,

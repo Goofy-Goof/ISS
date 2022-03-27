@@ -7,7 +7,6 @@ from .config import IMG_WIDTH, IMG_HEIGHT
 def_loss = tf.keras.losses.SparseCategoricalCrossentropy(from_logits=False)
 def_metrics = ['accuracy']
 def_optimizer = 'adam'
-eff_net_transfer_optimizer = tf.keras.optimizers.Adam(learning_rate=1e-2)
 
 
 def create_eff_net_pre_trained(num_classes, device_strategy):
@@ -23,7 +22,7 @@ def create_eff_net_pre_trained(num_classes, device_strategy):
         outputs = layers.Dense(num_classes, activation='softmax', name='prediction')(x)
         # Compile
         func_model = tf.keras.Model(inputs, outputs, name='eff_net_frozen')
-        func_model.compile(optimizer=eff_net_transfer_optimizer, loss=def_loss, metrics=def_metrics)
+        func_model.compile(optimizer=def_optimizer, loss=def_loss, metrics=def_metrics)
     return func_model
 
 
