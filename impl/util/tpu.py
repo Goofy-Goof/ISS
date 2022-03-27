@@ -1,11 +1,8 @@
 import tensorflow as tf
 
 
-class TpuStub:
-
-    @staticmethod
-    def scope():
-        return tf.device('/CPU:0')
+def cpu_strategy():
+     return tf.distribute.OneDeviceStrategy(device="/cpu:0")
 
 
 def init_tpu():
