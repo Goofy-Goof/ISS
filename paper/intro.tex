@@ -37,20 +37,20 @@ The process can be summarised using the following expression:
 \begin{figure}[h]
     \begin{subfigure}{0.4\textwidth}
         \caption{Tulips 40\% confidence}
-        \includegraphics[width=7cm]{images/og_image}
+        \includegraphics[width=8cm]{images/og_image}
     \end{subfigure}
     \begin{subfigure}{0.4\textwidth}
         \caption{Adversarial pattern for this image}
-        \includegraphics[width=7cm]{images/adv_pattern}
+        \includegraphics[width=8cm]{images/adv_pattern}
     \end{subfigure}
     \\
     \begin{subfigure}{0.4\textwidth}
         \caption{$\epsilon = 0.01$, Roses 40\% confidence}
-        \includegraphics[width=7cm]{images/adv_attack_001}
+        \includegraphics[width=8cm]{images/adv_attack_001}
     \end{subfigure}
     \begin{subfigure}{0.4\textwidth}
         \caption{$\epsilon = 0.1$, Roses 40\% confidence}
-        \includegraphics[width=7cm]{images/adv_attack_01}
+        \includegraphics[width=8cm]{images/adv_attack_01}
     \end{subfigure}
 \end{figure}
 
@@ -118,7 +118,7 @@ For detailed implementation please refer to \href{https://github.com/Goofy-Goof/
 Similarly to rotation pseudo labels in [0\ldots23] have been assigned, images were shuffled and dense layer was replaced by suitable one.
 The network then is trained to identify permutation applied.
 \\
-\begin{figure}
+\begin{figure}[h]
     \begin{subfigure}{0.33\textwidth}
         \caption{Original image}
         \includegraphics[width=5cm]{images/dandelion}
