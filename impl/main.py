@@ -1,7 +1,7 @@
 import argparse
-from util.tpu import init_tpu
+from util.utils import init_tpu
 from util.evaluation import eval_no_pretext, eval_jigsaw, eval_rotation, eval_eff_net_pre_trained, find_opt_down_epochs
-from util.config import EVALUATION_ITERATIONS, PRETEXT_EPOCHS, DOWNSTREAM_EPOCHS, OPTIMAL_DOWNSTREAM_EPOCHS
+from util.config import PRETEXT_EPOCHS, DOWNSTREAM_EPOCHS, OPTIMAL_DOWNSTREAM_EPOCHS
 
 
 def main(task, iterations, pretext_epochs, downstream_epochs, opt_downstream_ep):
@@ -64,7 +64,7 @@ def parse_args():
         '--iterations',
         type=int,
         help='Iterations to eval',
-        default=EVALUATION_ITERATIONS
+        default=1
     )
     parser.add_argument(
         '--pretext-epochs',
