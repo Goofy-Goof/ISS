@@ -5,10 +5,26 @@ In this paper I set up a goal to investigate if including pretext task in traini
 vulnerability against adversarial attacks.
 
 \paragraph{Observations}
+\begin{itemize}
+    \item both pretext task reduced miss-classification rate a little
+    \item both pretext task have improved accuracy a little
+    \item both pretext tasks increased $\epsilon$ a little
+    \item accuracy, miss rate, $epsilon$ are still far from competing with the values for EffNet pre-trained on ImageNet
+\end{itemize}
 
 \paragraph{Interpretation}
 
 \paragraph{Limitations}
+\begin{itemize}
+    \item Each scenario was recorded only 4 times
+    \item Evaluation was done only for 1 dataset
+    \item Implementation was not peer-reviewed
+    \item Hyper parameters of NN (learning-rate, loss function etc.) were not fine-tuned,
+    but just taken as recommended from documentation.
+\end{itemize}
 
-\paragraph{Conslusion}
+\paragraph{Conclusion}
+Pretext training did give a little improvement in accuracy as well as robustness against adversarial attacks.
+However, it's still far from either competing with pre-training on ImageNet or solving the problem of NNs vulnerability
+to adversarial attacks.
 

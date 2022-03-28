@@ -3,12 +3,12 @@
 \begin{table}[h]
     \begin{tabular}{|r|r|r|r|}
         \hline
-        Pretext epochs & Accuracy, \% & Miss classification rate, \% & $\overline{\epsilon}$ \\
+        Pretext epochs & Accuracy, \%              & Miss classification rate, \% & $\overline{\epsilon}$ \\
         \hline
-        25             & 44.531       & 92.982                       & 0.011                 \\
-        50             & 43.945       & 93.556                       & 0.011                 \\
-        75             & 46.094       & 95.127                       & 0.011                 \\
-        100            & 46.094       & 93.220                       & 0.011                 \\
+        25             & 44.531                    & \cellcolor{yellow} 92.982    & 0.011                 \\
+        50             & 43.945                    & 93.556                       & 0.011                 \\
+        75             & \cellcolor{yellow} 46.094 & 95.127                       & 0.011                 \\
+        100            & 46.094                    & 93.220                       & 0.011                 \\
         \hline
     \end{tabular}
     \caption{\label{tab:table-1}Results for jigsaw pretext task}
@@ -19,12 +19,12 @@
 \begin{table}[h]
     \begin{tabular}{|r|r|r|r|}
         \hline
-        Pretext epochs & Accuracy, \% & Miss classification rate, \% & $\overline{\epsilon}$ \\
+        Pretext epochs & Accuracy, \%              & Miss classification rate, \% & $\overline{\epsilon}$    \\
         \hline
-        25             & 45.605       & 98.501                       & 0.010                 \\
-        50             & 40.332       & 99.274                       & 0.010                 \\
-        75             & 44.922       & 98.913                       & 0.011                 \\
-        100            & 42.773       & 96.575                       & 0.012                 \\
+        25             & \cellcolor{yellow} 45.605 & 98.501                       & 0.010                    \\
+        50             & 40.332                    & 99.274                       & 0.010                    \\
+        75             & 44.922                    & 98.913                       & 0.011                    \\
+        100            & 42.773                    & \cellcolor{yellow} 96.575    & \cellcolor{yellow} 0.012 \\
         \hline
     \end{tabular}
     \caption{\label{tab:table-2}Results for rotation pretext task}
@@ -37,8 +37,8 @@
         \hline
         ImageNet                                & 64.375       & 92.112                       & 0.013                 \\
         None                                    & 38.906       & 99.598                       & 0.010                 \\
-        rotation                                &              &                              &                       \\
-        jigsaw                                  &              &                              &                       \\
+        rotation                                & 45.605       & 96.575                       & 0.012                 \\
+        jigsaw                                  & 46.094       & 92.982                       & 0.011                 \\
         \hline
     \end{tabular}
     \caption{\label{tab:table-3}Comparison of best results among different pretext tasks, pre-training}

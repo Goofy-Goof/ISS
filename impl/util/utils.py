@@ -5,8 +5,16 @@ from .config import BATCH_SIZE
 import tensorflow as tf
 
 
-def cpu_strategy():
-    return tf.distribute.OneDeviceStrategy(device="/cpu:0")
+def one_device_strategy():
+    return tf.distribute.OneDeviceStrategy()
+
+
+def distributed_strategy():
+    return tf.distribute.MirroredStrategy()
+
+
+def list_devices():
+    print(tf.config.list_physical_devices())
 
 
 def init_tpu():

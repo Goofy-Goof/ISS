@@ -121,3 +121,4 @@ def persist_downstream_epochs_result(model_name, dataset, start, end, downstream
     db = client.iss
     inserted_id = db.results3.insert_one(json).inserted_id
     print('inserted_id = {}'.format(inserted_id))
+
