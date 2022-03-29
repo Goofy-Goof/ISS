@@ -1,8 +1,7 @@
 import tensorflow as tf
 from .utils import predict_batch
 import numpy as np
-
-EPSILON = 0.1
+from .config import EPSILON
 
 
 def eval_signed_grad_batch(image: np.ndarray, label: np.ndarray, model):

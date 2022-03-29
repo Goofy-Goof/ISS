@@ -14,3 +14,5 @@ PRETEXT_EPOCHS = [
     30,
     45
 ]
+
+EPSILON = 0.01

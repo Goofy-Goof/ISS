@@ -140,8 +140,7 @@ Then according to this formula:
 \begin{equation}
     adv\_x = x + \epsilon \cdot sign(\nabla_x J(\theta, x, y))
 \end{equation}
-pattern was then added pixel wise to original image with $\epsilon$ varying in [0.01\ldots0.1]
-(any higher values make the image visually disrupted for human viewer).
+pattern was then added pixel wise to original image with $\epsilon = 0.01$.
 Resulting adversarial image was then clipped by value, so each pixel value stays in interval [0\ldots255],
 as required for RGB color encoding.
 For detailed implementation please refer to \href{https://github.com/Goofy-Goof/ISS/blob/33a2ad40b779ff230aae31c29d2edc2cf5d90406/impl/util/adversarial.py}{GitHub/adversarial.py}
@@ -149,22 +148,20 @@ For detailed implementation please refer to \href{https://github.com/Goofy-Goof/
 
 \paragraph{Evaluation approach}
 In order to evaluate, how including pretext task in training process influences NNs vulnerability against adversarial attacks,
-Intensity of adversarial pattern needed to make NN miss classify (Further denoted with epsilon or $\epsilon$) was measured.
+I have measured miss-classification rate while keeping intensity of adversarial pattern fixed at $\epsilon = 0.01$.
 \\
 5\% of dataset were reserved for experiment.
 During each evaluation round NN network was trained with rotation or jigsaw pretext task.
-Number of training epochs was varied in [25, 50, 75, 100] for pretext training, Number of epochs for downstream training was set to 50.
+Number of training epochs was varied in [15, 30, 45] for pretext training, Number of epochs for downstream training was set to 30.
 \\
 Reserved images were given to NN, the ones which were correctly classified saved.
 Then for each of saved (previously correctly classified images) adversarial image was created using FGSM with $\epsilon = 0.01$.
-If classification was still correct $\epsilon$ value was increased by 0.005.
-This was repeated until NN produced false classification or $\epsilon$ reached value of 0.1
+Number of miss-classification was recorded.
 \\
-$\overline{\epsilon}$ was compared for different values of pretext training epochs and kinds of pretext tasks.
 In order to compare how pretext tasks perform in comparison with other popular state of the art pre-training technics perform,
-the result were compared with EffNet trained for 50 epochs without pretext task and EffNet pre-trained for image classification on ImageNet.
+the result were compared with EffNet trained for 30 epochs without pretext task and EffNet pre-trained for image classification on ImageNet.
 \\
-Following metrics were recorded:
+Following metrics of interest were recorded:
 
 \begin{equation}
     Accuracy_i = \frac{\# \; images \; correctly \; classified_i}{\# \; test \; images_i} \cdot 100 \%
@@ -177,7 +174,4 @@ Following metrics were recorded:
 \end{equation}
 \begin{equation}
     \overline{Miss \; rate} = \frac{1}{N}  \sum_{i=1}^{N}{Miss \; rate_i}
-\end{equation}
-\begin{equation}
-    \overline{\epsilon} = \frac{1}{N}  \sum_{i=1}^{N}{min(\epsilon)_i} |_{i = index \; of \; miss \; classified \; image}
 \end{equation}
