@@ -20,9 +20,9 @@ In the domain of image classification, adversarial attacks are images usually fo
 (which is barely noticeable for human viewer) to a naturally occurring image, with intention to make NN miss-classify.
 
 \paragraph{Fast gradient sign method}
-The name was first introduced by Goodfellow and Jonathon Shlens and Christian Szegedy
-~\cite{goodfellow2015explaining} as guaranteed approach to make artificial NN miss-classify an image,
-which still would de be recognisable as of the same class for human viewer.
+The method was first introduced by Goodfellow and Jonathon Shlens and Christian Szegedy
+~\cite{goodfellow2015explaining}.It produces adversarial images which make NN miss-classify,
+but are still recognisable as of the same class for human viewer.
 Fast gradient sign method (further denoted as FGSM) works by using the gradients of the neural network to create an adversarial pattern.
 For an input image, the method evaluates the signed gradient of the loss function with respect to the input image to create a pattern,
 which maximises the loss.
@@ -163,3 +163,21 @@ This was repeated until NN produced false classification or $\epsilon$ reached v
 $\overline{\epsilon}$ was compared for different values of pretext training epochs and kinds of pretext tasks.
 In order to compare how pretext tasks perform in comparison with other popular state of the art pre-training technics perform,
 the result were compared with EffNet trained for 50 epochs without pretext task and EffNet pre-trained for image classification on ImageNet.
+\\
+Following metrics were recorded:
+
+\begin{equation}
+    Accuracy_i = \frac{\# \; images \; correctly \; classified_i}{\# \; test \; images_i} \cdot 100 \%
+\end{equation}
+\begin{equation}
+    \overline{Accuracy} = \frac{1}{N}  \sum_{i=1}^{N}{Accuracy_i}
+\end{equation}
+\begin{equation}
+    Miss \; rate_i = \frac{\# images \; miss \; classified_i}{\# \; images \; correctly \; classified_i} \cdot 100 \%
+\end{equation}
+\begin{equation}
+    \overline{Miss \; rate} = \frac{1}{N}  \sum_{i=1}^{N}{Miss \; rate_i}
+\end{equation}
+\begin{equation}
+    \overline{\epsilon} = \frac{1}{N}  \sum_{i=1}^{N}{min(\epsilon)_i} |_{i = index \; of \; miss \; classified \; image}
+\end{equation}

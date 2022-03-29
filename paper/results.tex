@@ -1,48 +1,126 @@
+\newpage
 \section{Results}
-
-\begin{table}[h]
+\begin{table}[ht]
     \begin{tabular}{|r|r|r|r|}
         \hline
-        Pretext epochs & Accuracy, \%              & Miss classification rate, \% & $\overline{\epsilon}$ \\
+        Pre-training & \overline{Accuracy}, \% & \overline{Miss \; rate}, \% & $\overline{\epsilon}$ \\
         \hline
-        25             & 44.531                    & \cellcolor{yellow} 92.982    & 0.011                 \\
-        50             & 43.945                    & 93.556                       & 0.011                 \\
-        75             & \cellcolor{yellow} 46.094 & 95.127                       & 0.011                 \\
-        100            & 46.094                    & 93.220                       & 0.011                 \\
+        ImageNet & 64.766                  & 94.13                       & 0.013                 \\
+        None      &  40.352                  & 98.805                      & 0.01                  \\
+        \hline
+    \end{tabular}
+    \caption{\label{tab:table-0}Baseline results}
+\end{table}
+\begin{table}[h]
+    \begin{tabular}{|r|r|r|}
+        \hline
+        {}           & \sigma (std \; dev) & s (variance) \\
+        \hline
+        Accuracy \%  & 1.045               & 1.093        \\
+        Miss Rate \% & 2.239               & 5.014        \\
+        Epsilon      & 0.001               & 0.000        \\
+        \hline
+    \end{tabular}
+    \caption{\label{tab:table-00}Statistical analysis for for EffNet pre-trained on Image Net}
+\end{table}
+\begin{table}[hb]
+    \begin{tabular}{|r|r|r|}
+        \hline
+        {}           & \sigma (std \; dev) & s (variance) \\
+        \hline
+        Accuracy \%  & 2.939               & 8.638        \\
+        Miss Rate \% & 2.042               & 4.168        \\
+        Epsilon      & 0.000               & 0.000        \\
+        \hline
+    \end{tabular}
+    \caption{\label{tab:table-001}Statistical analysis for for EffNet with no pre-training}
+\end{table}
+
+
+
+\begin{table}[ht]
+    \begin{tabular}{|r|r|r|r|}
+        \hline
+        Pretext epochs & \overline{Accuracy}, \% & \overline{Miss \; rate}, \% & $\overline{\epsilon}$ \\
+        \hline
+        25             & 45.020                  & 94.478                      & 0.011                 \\
+        50             & 44.043                  & 95.446                      & 0.011                 \\
+        75             & 44.873                  & 93.645                      & 0.011                 \\
+        100            & 45.801                  & 94.667                      & 0.011                 \\
         \hline
     \end{tabular}
     \caption{\label{tab:table-1}Results for jigsaw pretext task}
 \end{table}
-
-
-
+\begin{table}[h]
+    \begin{tabular}{|r|r|r|}
+        \hline
+        {}            & \sigma (std \; dev) & s (variance) \\
+        \hline
+        Accuracy, \%  & 2.413               & 5.822        \\
+        Miss Rate, \% & 3.837               & 14.723       \\
+        Epsilon       & 0.001               & 0.000        \\
+        \hline
+    \end{tabular}
+    \caption{\label{tab:table-11}Statistical analysis for jigsaw pretext task}
+\end{table}
 \begin{table}[h]
     \begin{tabular}{|r|r|r|r|}
         \hline
-        Pretext epochs & Accuracy, \%              & Miss classification rate, \% & $\overline{\epsilon}$    \\
+        Pretext epochs & \overline{Accuracy}, \% & \overline{Miss \; rate}, \% & $\overline{\epsilon}$ \\
         \hline
-        25             & \cellcolor{yellow} 45.605 & 98.501                       & 0.010                    \\
-        50             & 40.332                    & 99.274                       & 0.010                    \\
-        75             & 44.922                    & 98.913                       & 0.011                    \\
-        100            & 42.773                    & \cellcolor{yellow} 96.575    & \cellcolor{yellow} 0.012 \\
+        25             & 43.821                  & 97.740                      & 0.010                 \\
+        50             & 43.501                  & 97.587                      & 0.010                 \\
+        75             & 44.567                  & 97.775                      & 0.010                 \\
+        100            & 43.714                  & 96.536                      & 0.011                 \\
         \hline
     \end{tabular}
     \caption{\label{tab:table-2}Results for rotation pretext task}
 \end{table}
-
-\begin{table}[h]
-    \begin{tabular}{|r|r|r|r|}
+\begin{table}[hb]
+    \begin{tabular}{|r|r|r|}
         \hline
-        Pretext task\textbackslash Pre-training & Accuracy, \% & Miss classification rate, \% & $\overline{\epsilon}$ \\
+        {}           & \sigma (std \; dev) & s (variance) \\
         \hline
-        ImageNet                                & 64.375       & 92.112                       & 0.013                 \\
-        None                                    & 38.906       & 99.598                       & 0.010                 \\
-        rotation                                & 45.605       & 96.575                       & 0.012                 \\
-        jigsaw                                  & 46.094       & 92.982                       & 0.011                 \\
+        Accuracy \%  & 3.592               & 12.902       \\
+        Miss Rate \% & 2.289               & 5.238        \\
+        Epsilon      & 0.001               & 0.000        \\
         \hline
     \end{tabular}
-    \caption{\label{tab:table-3}Comparison of best results among different pretext tasks, pre-training}
+    \caption{\label{tab:table-22}Statistical analysis for rotation pretext task}
 \end{table}
+
+\newpage
+
+
+%\begin{table}
+%    \begin{tabular}{|r|r|r|r|}
+%        \hline
+%        Pretext task\textbackslash Pre-training & Accuracy, \% & Miss classification rate, \% & $\overline{\epsilon}$ \\
+%        \hline
+%        ImageNet                                & 66.406250    & 90.000000                    & 0.013717              \\
+%        None                                    & 45.703125    & 94.000000                    & 0.010851              \\
+%        rotation                                & 50.000000    & 91.735537                    & 0.012198              \\
+%        jigsaw                                  & 49.609375    & 84.821429                    & 0.013100              \\
+%        \hline
+%    \end{tabular}
+%    \caption{\label{tab:table-3}Comparison of best results among different pretext tasks, pre-training}
+%\end{table}
+%
+%
+%\begin{table}
+%    \begin{tabular}{|r|r|r|r|}
+%        \hline
+%        Pretext task\textbackslash Pre-training & Accuracy, \% & Miss classification rate, \% & $\overline{\epsilon}$ \\
+%        \hline
+%        ImageNet                                & 62.500000    & 97.058824                    & 0.013717              \\
+%        None                                    & 34.765625    & 100.000000                   & 0.010851              \\
+%        rotation                                & 33.203125    & 100.000000                   & 0.010000              \\
+%        jigsaw                                  & 38.671875    & 100.000000                   & 0.010000              \\
+%        \hline
+%    \end{tabular}
+%    \caption{\label{tab:table-4}Comparison of worst results among different pretext tasks, pre-training}
+%\end{table}
+
 
 \begin{figure}
     \includegraphics{images/acc}
@@ -55,7 +133,7 @@
 \end{figure}
 
 \begin{figure}
-    \includegraphics{images/epsilon}
+    \includegraphics{images/eps}
     \caption{\label{fig:figure-3}$\overline{\epsilon}$ comparison}
 \end{figure}
 
