@@ -1,14 +1,13 @@
 from typing import Optional
 import tensorflow as tf
 from .dataset import create_flowers_ds
-from .models import create_eff_net_trainable, create_eff_net_pre_trained
 from pymongo import MongoClient
-from .pretext import PretextTrainer, RotationPretextTrainer, JigsawPretextTrainer
+from .pretext import PretextTrainer, RotationPretextTrainer, JigsawPretextTrainer, freeze_conv_layers
 from .utils import prediction_round
 from .adversarial import adversarial_round
 from datetime import datetime
 from .config import BATCH_SIZE, MONGO_URI
-import numpy as np
+from .model import create_eff_net_trainable, create_eff_net_pre_trained
 
 def_callbacks = [
     tf.keras.callbacks.TerminateOnNaN(),
@@ -17,49 +16,38 @@ def_callbacks = [
 ]
 
 
-def freeze_conv_layers(model):
-    # Freezing the Convolutional Layers while keeping Dense layers as Trainable
-    for layer in model.layers:
-        if str(layer.name).find('conv') == -1:
-            layer.trainable = True
-        else:
-            layer.trainable = False
-    return model
+def eval_no_pretext(strategy, downstream_epochs, iterations):
+    for i in range(iterations):
+        print(f'Iteration -> {i}')
+        print('-' * 50)
+        _eval_round(model_constr=create_eff_net_trainable, strategy=strategy, pr_task=None, pr_epochs=None,
+                    downstream_epochs=downstream_epochs)
 
 
-def find_opt_down_epochs(strategy, down_epochs):
-    for ep in down_epochs:
-        start = datetime.now()
-        ds = create_flowers_ds()
-        NN = create_eff_net_trainable(ds.num_classes, strategy)
-        NN.fit(ds.train, validation_data=ds.val, epochs=ep, callbacks=def_callbacks)
-        print('Started prediction round')
-        pred_img, pred_label = prediction_round(ds, NN)
-        end = datetime.now()
-        persist_downstream_epochs_result(model_name=NN.name, dataset=ds, start=start, end=end,
-                                         downstream_epochs=ep, predicted_num=len(pred_label))
+def eval_eff_net_pre_trained(strategy, downstream_epochs, iterations):
+    for i in range(iterations):
+        print(f'Iteration -> {i}')
+        print('-' * 50)
+        _eval_round(model_constr=create_eff_net_pre_trained, strategy=strategy, pr_task=None,
+                    pr_epochs=None, downstream_epochs=downstream_epochs)
 
 
-def eval_no_pretext(strategy, downstream_epochs):
-    _eval_round(model_constr=create_eff_net_trainable, strategy=strategy, pr_task=None, pr_epochs=None,
-                downstream_epochs=downstream_epochs)
+def eval_rotation(strategy, pretext_epochs, downstream_epochs, iterations):
+    for i in range(iterations):
+        print(f'Iteration -> {i}')
+        print('-' * 50)
+        for j in pretext_epochs:
+            _eval_round(model_constr=create_eff_net_trainable, strategy=strategy, pr_task=RotationPretextTrainer(),
+                        pr_epochs=j, downstream_epochs=downstream_epochs)
 
 
-def eval_eff_net_pre_trained(strategy, downstream_epochs):
-    _eval_round(model_constr=create_eff_net_pre_trained, strategy=strategy, pr_task=None,
-                pr_epochs=None, downstream_epochs=downstream_epochs)
-
-
-def eval_rotation(strategy, pretext_epochs, downstream_epochs):
-    for i in pretext_epochs:
-        _eval_round(model_constr=create_eff_net_trainable, strategy=strategy, pr_task=RotationPretextTrainer(),
-                    pr_epochs=i, downstream_epochs=downstream_epochs)
-
-
-def eval_jigsaw(strategy, pretext_epochs, downstream_epochs):
-    for i in pretext_epochs:
-        _eval_round(model_constr=create_eff_net_trainable, strategy=strategy, pr_task=JigsawPretextTrainer(),
-                    pr_epochs=i, downstream_epochs=downstream_epochs)
+def eval_jigsaw(strategy, pretext_epochs, downstream_epochs, iterations):
+    for i in range(iterations):
+        print(f'Iteration -> {i}')
+        print('-' * 50)
+        for j in pretext_epochs:
+            _eval_round(model_constr=create_eff_net_trainable, strategy=strategy, pr_task=JigsawPretextTrainer(),
+                        pr_epochs=j, downstream_epochs=downstream_epochs)
 
 
 def _eval_round(model_constr, strategy, pr_task: Optional[PretextTrainer], pr_epochs, downstream_epochs):
@@ -77,14 +65,13 @@ def _eval_round(model_constr, strategy, pr_task: Optional[PretextTrainer], pr_ep
     print('Started prediction round')
     pred_img, pred_label = prediction_round(ds, NN)
     print('Started adversarial round')
-    epsilons = adversarial_round(pred_img, pred_label, NN)
+    miss_num = adversarial_round(pred_img, pred_label, NN)
     end = datetime.now()
     persist_result(model_name=NN.name, dataset=ds, start=start, end=end, downstream_epochs=downstream_epochs,
-                   pretext_epochs=pr_epochs, pr_trainer=pr_task, predicted_num=len(pred_label), epsilons=epsilons)
+                   pretext_epochs=pr_epochs, pr_trainer=pr_task, predicted_num=len(pred_label), miss_num=miss_num)
 
 
-def persist_result(model_name, dataset, start, end, downstream_epochs, pretext_epochs, pr_trainer,
-                   predicted_num, epsilons):
+def persist_result(model_name, dataset, start, end, downstream_epochs, pretext_epochs, pr_trainer, predicted_num: int, miss_num: int):
     json = {
         'model_type': model_name,
         'dataset': dataset.name,
@@ -93,8 +80,7 @@ def persist_result(model_name, dataset, start, end, downstream_epochs, pretext_e
         'downstream_epochs': downstream_epochs,
         'total_test_images': len(dataset.test) * BATCH_SIZE,
         'predicted': predicted_num,
-        'miss_classified': len(epsilons),
-        'epsilon_mean': np.mean(epsilons)
+        'miss_classified': miss_num,
     }
     if pr_trainer is not None:
         json['pretext_epochs'] = pretext_epochs
@@ -102,23 +88,5 @@ def persist_result(model_name, dataset, start, end, downstream_epochs, pretext_e
     print('Test results: {}'.format(json))
     client = MongoClient(MONGO_URI)
     db = client.iss
-    inserted_id = db.results4.insert_one(json).inserted_id
+    inserted_id = db.results5.insert_one(json).inserted_id
     print('inserted_id = {}'.format(inserted_id))
-
-
-def persist_downstream_epochs_result(model_name, dataset, start, end, downstream_epochs, predicted_num):
-    json = {
-        'model_type': model_name,
-        'dataset': dataset.name,
-        'from': start,
-        'until': end,
-        'downstream_epochs': downstream_epochs,
-        'total_test_images': len(dataset.test) * BATCH_SIZE,
-        'predicted': predicted_num,
-    }
-    print('Test results: {}'.format(json))
-    client = MongoClient(MONGO_URI)
-    db = client.iss
-    inserted_id = db.down_epochs_res.insert_one(json).inserted_id
-    print('inserted_id = {}'.format(inserted_id))
-

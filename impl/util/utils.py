@@ -5,18 +5,6 @@ from .config import BATCH_SIZE
 import tensorflow as tf
 
 
-def one_device_strategy():
-    return tf.distribute.OneDeviceStrategy()
-
-
-def distributed_strategy():
-    return tf.distribute.MirroredStrategy()
-
-
-def list_devices():
-    print(tf.config.list_physical_devices())
-
-
 def init_tpu():
     print('Connecting to TPU')
     tpu = tf.distribute.cluster_resolver.TPUClusterResolver()  # TPU detection

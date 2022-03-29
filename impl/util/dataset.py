@@ -44,17 +44,6 @@ class Dataset:
         )
 
 
-ds_on_gcs_names = [
-    'tf_flowers',
-    'cats_vs_dogs',
-    'horses_or_humans',
-    'stanford_dogs',
-    'fashion_mnist',
-    'rock_paper_scissors',
-    'colorectal_histology'
-]
-
-
 def create_flowers_ds():
     print('Creating dataset TF Flowers')
-    return Dataset(ds_on_gcs_names[0])
+    return Dataset('tf_flowers')

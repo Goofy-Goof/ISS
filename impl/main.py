@@ -1,56 +1,30 @@
 import argparse
 from util.utils import init_tpu
-from util.evaluation import eval_no_pretext, eval_jigsaw, eval_rotation, eval_eff_net_pre_trained, find_opt_down_epochs
-from util.config import PRETEXT_EPOCHS, DOWNSTREAM_EPOCHS, OPTIMAL_DOWNSTREAM_EPOCHS
+from util.evaluation import eval_no_pretext, eval_jigsaw, eval_rotation, eval_eff_net_pre_trained
+from util.config import PRETEXT_EPOCHS, DOWNSTREAM_EPOCHS
 
 
-def main(task, iterations, pretext_epochs, downstream_epochs, opt_downstream_ep):
+def main(task, iterations, pretext_epochs):
+    if task not in ['rotation', 'jigsaw', 'none', 'transfer']:
+        raise Exception(f'Unknown task {task}')
+
+    tpu = init_tpu()
+    print(f'Evaluating {task}')
+    print('-' * 50)
     if task == 'rotation':
-        tpu = init_tpu()
-        print('Evaluating rotation')
-        print('-' * 50)
-        for i in range(iterations):
-            print(f'Iteration -> {i}')
-            print('-' * 50)
-            eval_rotation(strategy=tpu, pretext_epochs=pretext_epochs, downstream_epochs=opt_downstream_ep)
+        eval_rotation(strategy=tpu, pretext_epochs=pretext_epochs, downstream_epochs=DOWNSTREAM_EPOCHS,
+                      iterations=iterations)
         return
     if task == 'jigsaw':
-        print('Evaluating jigsaw')
-        print('-' * 50)
-        tpu = init_tpu()
-        for i in range(iterations):
-            print(f'Iteration -> {i}')
-            print('-' * 50)
-            eval_jigsaw(strategy=tpu, pretext_epochs=pretext_epochs, downstream_epochs=opt_downstream_ep)
+        eval_jigsaw(strategy=tpu, pretext_epochs=pretext_epochs, downstream_epochs=DOWNSTREAM_EPOCHS,
+                    iterations=iterations)
         return
-    if task == 'None':
-        print('Evaluating no pretext')
-        print('-' * 50)
-        tpu = init_tpu()
-        for i in range(iterations):
-            print(f'Iteration -> {i}')
-            print('-' * 50)
-            eval_no_pretext(strategy=tpu, downstream_epochs=opt_downstream_ep)
+    if task == 'none':
+        eval_no_pretext(strategy=tpu, downstream_epochs=DOWNSTREAM_EPOCHS, iterations=iterations)
         return
     if task == 'transfer':
-        print('Evaluating pre-trained EffNet')
-        print('-' * 50)
-        tpu = init_tpu()
-        for i in range(iterations):
-            print(f'Iteration -> {i}')
-            print('-' * 50)
-            eval_eff_net_pre_trained(strategy=tpu, downstream_epochs=opt_downstream_ep)
+        eval_eff_net_pre_trained(strategy=tpu, downstream_epochs=DOWNSTREAM_EPOCHS, iterations=iterations)
         return
-    if task == 'epochs':
-        print('Evaluating optimal downstream epochs number')
-        print('-' * 50)
-        tpu = init_tpu()
-        for i in range(iterations):
-            print(f'Iteration -> {i}')
-            print('-' * 50)
-            find_opt_down_epochs(strategy=tpu, down_epochs=downstream_epochs)
-        return
-    raise Exception(f'Unknown task {task}')
 
 
 def parse_args():
@@ -73,21 +47,7 @@ def parse_args():
         help='Pretext epochs',
         default=PRETEXT_EPOCHS
     )
-    parser.add_argument(
-        '--opt-downstream-epochs',
-        type=int,
-        help='Number of optimal downstream epochs after pretext training',
-        default=OPTIMAL_DOWNSTREAM_EPOCHS
-    )
-    parser.add_argument(
-        '--downstream-epochs',
-        type=int,
-        nargs='*',
-        help='Number of downstream epochs (while investigating which to use after pretext)',
-        default=DOWNSTREAM_EPOCHS
-    )
-    args = parser.parse_args()
-    return args
+    return parser.parse_args()
 
 
 if __name__ == '__main__':
@@ -96,6 +56,4 @@ if __name__ == '__main__':
         task=args.task,
         iterations=args.iterations,
         pretext_epochs=args.pretext_epochs,
-        downstream_epochs=args.downstream_epochs,
-        opt_downstream_ep=args.opt_downstream_epochs
     )

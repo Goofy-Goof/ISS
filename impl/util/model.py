@@ -1,12 +1,11 @@
+import tensorflow as tf
 from tensorflow.keras import layers
 from tensorflow.keras.applications import EfficientNetB0
-import tensorflow as tf
 from .config import IMG_WIDTH, IMG_HEIGHT
 
-
-def_loss = tf.keras.losses.SparseCategoricalCrossentropy(from_logits=False)
-def_metrics = ['accuracy']
-def_optimizer = 'adam'
+DEF_LOSS = tf.keras.losses.SparseCategoricalCrossentropy(from_logits=False)
+DEF_METRIC = ['accuracy']
+DEF_OPTIMIZER = 'adam'
 
 
 def create_eff_net_pre_trained(num_classes, device_strategy):
@@ -22,7 +21,7 @@ def create_eff_net_pre_trained(num_classes, device_strategy):
         outputs = layers.Dense(num_classes, activation='softmax', name='prediction')(x)
         # Compile
         func_model = tf.keras.Model(inputs, outputs, name='eff_net_frozen')
-        func_model.compile(optimizer=def_optimizer, loss=def_loss, metrics=def_metrics)
+        func_model.compile(optimizer=DEF_OPTIMIZER, loss=DEF_LOSS, metrics=DEF_METRIC)
     return func_model
 
 
@@ -30,5 +29,5 @@ def create_eff_net_trainable(num_classes, device_strategy):
     print('Creating EfficientNetB0')
     with device_strategy.scope():
         eff_net = EfficientNetB0(include_top=True, weights=None, classes=num_classes)
-        eff_net.compile(optimizer=def_optimizer, loss=def_loss, metrics=def_metrics)
+        eff_net.compile(optimizer=DEF_OPTIMIZER, loss=DEF_LOSS, metrics=DEF_METRIC)
     return eff_net
