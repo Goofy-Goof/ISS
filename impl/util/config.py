@@ -24,4 +24,4 @@ PRETEXT_EPOCHS = [
     100
 ]
 
-EPSILONS = linspace(start=0.01, stop=0.1, num=19)
+EPSILONS = linspace(start=0.01, stop=0.1, num=200)
