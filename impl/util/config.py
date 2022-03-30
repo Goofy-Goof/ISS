@@ -12,7 +12,8 @@ DOWNSTREAM_EPOCHS = 30
 PRETEXT_EPOCHS = [
     15,
     30,
-    45
+    45,
+    60
 ]
 
 EPSILON = 0.01

@@ -72,4 +72,4 @@ def prediction_round(dataset: Dataset, model) -> (np.ndarray, np.ndarray):
 
 
 def decode_label(ds: Dataset, label: int):
-    return ds.class_names[label]
+    return np.take(ds.class_names, label)
