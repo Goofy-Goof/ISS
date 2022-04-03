@@ -3,11 +3,10 @@ import tensorflow as tf
 from .dataset import create_flowers_ds
 from pymongo import MongoClient
 from .pretext import PretextTrainer, RotationPretextTrainer, JigsawPretextTrainer, freeze_conv_layers, TransferLearningPretextTrainer
-from .utils import prediction_round
+from .utils import prediction_round, create_eff_net_trainable
 from .adversarial import adversarial_round
 from datetime import datetime
 from .config import BATCH_SIZE, MONGO_URI
-from .model import create_eff_net_trainable
 
 def_callbacks = [
     tf.keras.callbacks.TerminateOnNaN(),
