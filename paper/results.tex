@@ -3,20 +3,27 @@
 
 \section{Results}
 
+\paragraph{Baseline results}
+\begin{itemize}
+    \item  $\overline{Accuracy} = 37.285  \%$
+    \item  $\overline{Miss \; rate} = 99.097 \%$
+\end{itemize}
 
 \begin{table}[ht]
     \begin{tabular}{|r|r|r|}
         \hline
-        Pre-training & \overline{Accuracy}, \% & \overline{Miss \; rate}, \% \\
+        \# Pre-text epochs & \overline{Accuracy}, \% & \overline{Miss \; rate}, \% \\
         \hline
-        ImageNet     & 65.176                  & 82.195                      \\
-        None         & 37.285                  & 99.017                      \\
+        15                 & 43.004                  & 100.0                       \\
+        30                 & 43.533                  & 100.0                       \\
+        45                 & 42.882                  & 100.0                       \\
+        60                 & 42.882                  & 100.0                       \\
         \hline
     \end{tabular}
-    \caption{\label{tab:table-0}Baseline results}
+    \caption{\label{tab:table-01}Transfer learning results}
 \end{table}
 
-\begin{table}[ht]
+\begin{table}[hb]
     \begin{tabular}{|r|r|r|}
         \hline
         \# Pre-text epochs & \overline{Accuracy}, \% & \overline{Miss \; rate}, \% \\
@@ -30,7 +37,7 @@
     \caption{\label{tab:table-1}Jigsaw results}
 \end{table}
 
-\begin{table}[ht]
+\begin{table}[h]
     \begin{tabular}{|r|r|r|}
         \hline
         \# Pre-text epochs & \overline{Accuracy}, \% & \overline{Miss \; rate}, \% \\
