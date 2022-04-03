@@ -6,7 +6,7 @@ from .config import BATCH_SIZE
 import os
 from tensorflow.keras.applications import EfficientNetB0
 
-DEF_LOSS = tf.keras.losses.SparseCategoricalCrossentropy(from_logits=False)
+DEF_LOSS = tf.keras.losses.SparseCategoricalCrossentropy()
 DEF_METRIC = ['accuracy']
 DEF_OPTIMIZER = 'adam'
 
@@ -21,8 +21,8 @@ def create_eff_net_trainable(num_classes, device_strategy):
 
 def init_tpu():
     print('Connecting to TPU')
-    tpu_name = os.environ['TPU_NAME'] if 'TPU_NAME' in os.environ else None
-    tpu = tf.distribute.cluster_resolver.TPUClusterResolver(tpu_name)  # TPU detection
+    tpu_name = os.environ['TPU_NAME']
+    tpu = tf.distribute.cluster_resolver.TPUClusterResolver(tpu=tpu_name)  # TPU detection
     print('Running on TPU ', tpu.cluster_spec().as_dict()['worker'])
 
     tf.config.experimental_connect_to_cluster(tpu)
