@@ -17,7 +17,7 @@ def_callbacks = [
 
 def eval_no_pretext(strategy, downstream_epochs, iterations):
     for i in range(iterations):
-        print(f'Iteration -> {i}')
+        print(f'Iteration -> {i + 1}')
         print('-' * 50)
         _eval_round(model_constr=create_eff_net_trainable, strategy=strategy, pr_task=None, pr_epochs=None,
                     downstream_epochs=downstream_epochs)
@@ -25,7 +25,7 @@ def eval_no_pretext(strategy, downstream_epochs, iterations):
 
 def eval_transfer_learning(strategy, pretext_epochs, downstream_epochs, iterations):
     for i in range(iterations):
-        print(f'Iteration -> {i}')
+        print(f'Iteration -> {i + 1}')
         print('-' * 50)
         for j in pretext_epochs:
             _eval_round(model_constr=create_eff_net_trainable, strategy=strategy, pr_task=TransferLearningPretextTrainer(),
@@ -34,7 +34,7 @@ def eval_transfer_learning(strategy, pretext_epochs, downstream_epochs, iteratio
 
 def eval_rotation(strategy, pretext_epochs, downstream_epochs, iterations):
     for i in range(iterations):
-        print(f'Iteration -> {i}')
+        print(f'Iteration -> {i + 1}')
         print('-' * 50)
         for j in pretext_epochs:
             _eval_round(model_constr=create_eff_net_trainable, strategy=strategy, pr_task=RotationPretextTrainer(),
@@ -43,7 +43,7 @@ def eval_rotation(strategy, pretext_epochs, downstream_epochs, iterations):
 
 def eval_jigsaw(strategy, pretext_epochs, downstream_epochs, iterations):
     for i in range(iterations):
-        print(f'Iteration -> {i}')
+        print(f'Iteration -> {i + 1}')
         print('-' * 50)
         for j in pretext_epochs:
             _eval_round(model_constr=create_eff_net_trainable, strategy=strategy, pr_task=JigsawPretextTrainer(),
