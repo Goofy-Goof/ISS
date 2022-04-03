@@ -5,7 +5,7 @@ from .config import IMG_WIDTH, IMG_HEIGHT, BATCH_SIZE
 from functools import reduce
 from itertools import permutations
 from .dataset import load_dataset, resize_ds, configure_ds, Dataset
-from .model import DEF_OPTIMIZER, DEF_LOSS, DEF_METRIC
+from .utils import DEF_OPTIMIZER, DEF_LOSS, DEF_METRIC
 import numpy as np
 
 
