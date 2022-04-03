@@ -1,0 +1,4 @@
+tensorflow
+tensorflow-datasets
+pymongo[srv]
+cloud-tpu-client

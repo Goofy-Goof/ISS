@@ -1,5 +1,5 @@
 import argparse
-from argparse import BooleanOptionalAction
+#from argparse import BooleanOptionalAction
 from util.utils import init_tpu
 from util.evaluation import eval_no_pretext, eval_jigsaw, eval_rotation, eval_transfer_learning
 from util.config import PRETEXT_EPOCHS, DOWNSTREAM_EPOCHS
@@ -54,7 +54,7 @@ def parse_args():
     parser.add_argument(
         '--use-cpu',
         type=bool,
-        action=BooleanOptionalAction,
+        #action=BooleanOptionalAction,
         default=False
     )
     return parser.parse_args()

@@ -1,3 +1,5 @@
+import os
+
 import matplotlib.pyplot as plt
 import numpy as np
 from .dataset import Dataset
@@ -7,7 +9,8 @@ import tensorflow as tf
 
 def init_tpu():
     print('Connecting to TPU')
-    tpu = tf.distribute.cluster_resolver.TPUClusterResolver()  # TPU detection
+    tpu_name = os.environ['TPU_NAME'] if 'TPU_NAME' in os.environ else None
+    tpu = tf.distribute.cluster_resolver.TPUClusterResolver(tpu_name)  # TPU detection
     print('Running on TPU ', tpu.cluster_spec().as_dict()['worker'])
 
     tf.config.experimental_connect_to_cluster(tpu)
