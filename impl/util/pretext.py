@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 import tensorflow as tf
 from tensorflow.keras import layers
-from .config import IMG_WIDTH, IMG_HEIGHT
+from .config import IMG_WIDTH, IMG_HEIGHT, BATCH_SIZE
 from functools import reduce
 from itertools import permutations
 from .dataset import load_dataset, resize_ds, configure_ds, Dataset
@@ -134,3 +134,31 @@ def freeze_conv_layers(model):
         else:
             layer.trainable = False
     return model
+
+
+class TransferLearningPretextTrainer(PretextTrainer):
+    name = 'transfer-learning'
+    transfer_ds_name = 'imagenette'
+
+    def __init__(self):
+        super(TransferLearningPretextTrainer, self).__init__(pretext_label_num=10)
+
+    def _map_to_pretext_dataset(self, train, val):
+        # Nothing to do here
+        pass
+
+    def _create_pretext_dataset(self, name):
+        # We just load other ds for image classification
+        print(f'Loading dataset {self.transfer_ds_name}')
+        (train, val), metadata = load_dataset(name=self.transfer_ds_name, split=['train[:80%]', 'train[80%:]'])
+        class_names = metadata.features['label'].names
+        num_classes = metadata.features['label'].num_classes
+        print(
+            f'Found {(len(train) + len(val)) * BATCH_SIZE}'
+            f'datapoints belonging to {num_classes} classes:\n'
+            f'{class_names}\n '
+            f'Using {len(train) * BATCH_SIZE} for training, {len(val) * BATCH_SIZE} '
+        )
+        train = configure_ds(resize_ds(train))
+        val = configure_ds(resize_ds(val))
+        return train, val

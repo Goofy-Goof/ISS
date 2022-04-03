@@ -2,12 +2,12 @@ from typing import Optional
 import tensorflow as tf
 from .dataset import create_flowers_ds
 from pymongo import MongoClient
-from .pretext import PretextTrainer, RotationPretextTrainer, JigsawPretextTrainer, freeze_conv_layers
+from .pretext import PretextTrainer, RotationPretextTrainer, JigsawPretextTrainer, freeze_conv_layers, TransferLearningPretextTrainer
 from .utils import prediction_round
 from .adversarial import adversarial_round
 from datetime import datetime
 from .config import BATCH_SIZE, MONGO_URI
-from .model import create_eff_net_trainable, create_eff_net_pre_trained
+from .model import create_eff_net_trainable
 
 def_callbacks = [
     tf.keras.callbacks.TerminateOnNaN(),
@@ -24,12 +24,13 @@ def eval_no_pretext(strategy, downstream_epochs, iterations):
                     downstream_epochs=downstream_epochs)
 
 
-def eval_eff_net_pre_trained(strategy, downstream_epochs, iterations):
+def eval_transfer_learning(strategy, pretext_epochs, downstream_epochs, iterations):
     for i in range(iterations):
         print(f'Iteration -> {i}')
         print('-' * 50)
-        _eval_round(model_constr=create_eff_net_pre_trained, strategy=strategy, pr_task=None,
-                    pr_epochs=None, downstream_epochs=downstream_epochs)
+        for j in pretext_epochs:
+            _eval_round(model_constr=create_eff_net_trainable, strategy=strategy, pr_task=TransferLearningPretextTrainer(),
+                        pr_epochs=j, downstream_epochs=downstream_epochs)
 
 
 def eval_rotation(strategy, pretext_epochs, downstream_epochs, iterations):

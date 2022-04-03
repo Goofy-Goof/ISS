@@ -1,10 +1,13 @@
+import os
 import tensorflow_datasets as tfds
 from .config import IMG_WIDTH, IMG_HEIGHT, BATCH_SIZE
 import tensorflow as tf
 
 
 def load_dataset(name, split):
-    return tfds.load(name=name, split=split, try_gcs=True, as_supervised=True,
+    _data_dir = os.environ['DATA_DIR'] if 'DATA_DIR' in os.environ else None
+    print(f'Loading dataset from {_data_dir if _data_dir is not None else "~/tensorflow_datasets"}')
+    return tfds.load(name=name, split=split, as_supervised=True, data_dir=_data_dir,
                      with_info=True, batch_size=BATCH_SIZE)
 
 
