@@ -5,8 +5,10 @@ This has led to advances in many areas, including computer vision and object rec
 However, neural networks are also vulnerable to adversarial attacks~\cite{ilyas2019adversarial}.
 Adversarial attacks are designed to fool neural networks into misclassifying data.
 This can have serious consequences, as it can lead to incorrect results or decisions.
+Typical approach to ensure robustness, would be adversarial training, however if often comes with a cost of
+reduced classification accuracy~\cite{https://doi.org/10.48550/arxiv.1805.12152}.
 Pretext tasks had shown themselves to be usefully in improving accuracy~\cite{kolesnikov2019revisiting}.
-In this research, I would like to evaluate how including state-of-the-art pretext tasks in the training process 
+In this research, I would like to evaluate how including state-of-the-art pretext tasks in the training process
 influences neural networks' vulnerability to adversarial attacks.
 %\begin{itemize}
 %    \item In recent years NN for image classification had a lot of successes.
@@ -86,6 +88,7 @@ All of these patches are concatenated in 'puzzle' image, which is later sent thr
 \section{Methods}
 
 
+
 \paragraph{Rotation pretext task}
 Each image from original dataset was rotated 0°,90°,180°,270° and assigned new pseudo label:
 \begin{itemize}
@@ -96,8 +99,9 @@ Each image from original dataset was rotated 0°,90°,180°,270° and assigned n
 \end{itemize}
 all 4 batches of rotated images were concatenated in dataset, and shuffled.
 Then last dense layer of NN was replaced with dense layer for corresponding number of pseudo classes (4).
-Then same model was then trained to identify rotation applied.
-\\
+Then same model was then trained to identify rotation applied. \footnote{
+    For detailed implementation of pretext tasks as well as adversarial attack \\ using FGSM please refer to \href{https://github.com/Goofy-Goof/ISS/blob/33a2ad40b779ff230aae31c29d2edc2cf5d90406/impl}{GitHub/impl}.
+}
 \begin{figure}[h]
     \begin{subfigure}{0.33\textwidth}
         \caption{Label = 0}
@@ -114,13 +118,16 @@ Then same model was then trained to identify rotation applied.
     \caption{An example how images used for rotation pretext task could look like}
 \end{figure}
 
+
+
+
 \paragraph{Jigsaw pretext task}
 For jigsaw similar approach as described by Mehdi Noroozi and Paolo Favaro~\cite{DBLP:journals/corr/NorooziF16} was adopted.
 Random 4 out of 24 possible permutations were chosen for each batch.
 (number of possible permutation can be obtained from Newtonian binomial $P=\frac{r!}{(r-n)!}$).
 For each permutation each image was cut in 4 equal parts, they were afterwards permuted according to chosen permutation,
 and concatenated in 1 image afterwards.
-For detailed implementation please refer to \href{https://github.com/Goofy-Goof/ISS/blob/33a2ad40b779ff230aae31c29d2edc2cf5d90406/impl/util/pretext.py}{GitHub/pretext.py}.
+.
 Similarly to rotation pseudo labels in [0\ldots23] have been assigned, images were shuffled and dense layer was replaced by suitable one.
 The network then is trained to identify permutation applied.
 \\
@@ -139,6 +146,12 @@ The network then is trained to identify permutation applied.
     \caption{An example how puzzle for jigsaw pretext task could look like}
 \end{figure}
 
+\paragraph{Transfer learning}
+For transfer learning EffNet was pre-trained on "imagenette" dataset for image classification.
+Imagenete is a selection of 10 classes from the widely known ImageNet dataset. \footnote{
+    For information about "imagenette" please refer to \href{https://www.tensorflow.org/datasets/catalog/imagenette}{TF/imagenette}
+}
+
 \paragraph{Adversarial Images with FGSM}
 My implementation of FGSM was based on \href{https://www.tensorflow.org/tutorials/generative/adversarial_fgsm}{TF FGSM}.
 In order to generate adversarial pattern for each image, gradient of loss function is evaluated with sign for each image.
@@ -151,21 +164,9 @@ Resulting adversarial image was then clipped by value, so each pixel value stays
 as required for RGB color encoding.
 For detailed implementation please refer to \href{https://github.com/Goofy-Goof/ISS/blob/33a2ad40b779ff230aae31c29d2edc2cf5d90406/impl/util/adversarial.py}{GitHub/adversarial.py}
 
-
 \paragraph{Evaluation approach}
 In order to evaluate, how including pretext task in training process influences NNs vulnerability against adversarial attacks,
 I have measured miss-classification rate while keeping intensity of adversarial pattern fixed at $\epsilon = 0.01$.
-\\
-5\% of dataset were reserved for experiment.
-During each evaluation round NN network was trained with rotation or jigsaw pretext task.
-Number of training epochs was varied in [15, 30, 45] for pretext training, Number of epochs for downstream training was set to 30.
-\\
-Reserved images were given to NN, the ones which were correctly classified saved.
-Then for each of saved (previously correctly classified images) adversarial image was created using FGSM with $\epsilon = 0.01$.
-Number of miss-classifications was recorded.
-\\
-In order to compare how pretext tasks perform in comparison with other popular state of the art pre-training technics perform,
-the result were compared with EffNet trained for 30 epochs without pretext task and EffNet pre-trained for image classification on ImageNet.
 \\
 Following metrics of interest were recorded:
 
@@ -181,3 +182,15 @@ Following metrics of interest were recorded:
 \begin{equation}
     \overline{Miss \; rate} = \frac{1}{N}  \sum_{i=1}^{N}{Miss \; rate_i}
 \end{equation}
+\\
+The dataset "tf\_flowers" was chosen for experiment, 5\% of dataset were reserved for evaluation.
+\footnote{For information about "tf\_flowers" please refer to \href{https://www.tensorflow.org/datasets/catalog/tf_flowers}{TF/tf_flowers}}
+\\
+During each evaluation round NN network was pre-trained either with using transfer learning, or rotation, or jigsaw.
+Number of training epochs was varied in [15, 30, 45] for pretext training, while number of epochs for downstream
+training was fixed at 30.
+\\
+Reserved images were given to NN, the correctly classified were saved for later use.
+Then for each of saved (previously correctly classified ) images adversarial example was generated using FGSM with $\epsilon = 0.01$.
+\\
+Number of correct classifications, as well as number of miss-classifications were recorded in the end of each round.
