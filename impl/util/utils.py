@@ -24,7 +24,6 @@ def init_tpu():
     tpu_name = os.environ['TPU_NAME']
     tpu = tf.distribute.cluster_resolver.TPUClusterResolver(tpu=tpu_name)  # TPU detection
     print('Running on TPU ', tpu.cluster_spec().as_dict()['worker'])
-
     tf.config.experimental_connect_to_cluster(tpu)
     tf.tpu.experimental.initialize_tpu_system(tpu)
     strategy = tf.distribute.experimental.TPUStrategy(tpu)
