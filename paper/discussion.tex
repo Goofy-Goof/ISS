@@ -10,18 +10,31 @@ accuracy~\cite{DBLP:journals/corr/abs-1912-01991, DBLP:journals/corr/NorooziF16,
 
 
 \paragraph{Observations and Interpretation}
-All 3 pre-training approaches have shown an improvement in accuracy from 5\% to 8\%.
-Rotation and jigsaw were able to reduce miss-classification up to 5\% in comparison with transfer learning and no pre-training.
+All 3 pre-training approaches have shown a slight improvement.
+Accuracy was increased by all pre-text tasks, with jigsaw performing the best and being up to 8\% more accurate.
+Transfer learning and no pre-training had shown no decrease in miss-classification rate.
+Rotation and jigsaw were able to reduce miss-classification rate up to 5\%, starting up from 45 training epochs.
+\\
+FGSM evaluates loss function of NN,
+so it would be natural to assume that higher accuracy pairs with higher adversarial vulnerability.
+\\
+TF Flowers consist of 3670 items.
+During pretext training, 4 pseudo classes were generated,
+which results in 14680 images, and \textbf{18350} images together with downstream training.
+Imagenette consists of 13,394, which results in \textbf{17064} images together with downstream training.
+So the improvements could partially be caused by bigger training dataset size.
 \\
 \ldots
 \\
-The experiment was done for a $\epsilon = 0.01$ (which is not even visible for human viewer).
+The experiment was done for a $\epsilon = 0.01$ (which are not even visible for human viewer).
 And the improvement of 5\% is far from solving the problem of adversarial vulnerability.
 
 \paragraph{Limitations}This study comes with a few limitations,
 most of them coming from to time and resource limitation, as well as working standalone on the research question.
+\\
 The most important one is the fact that the evaluation was done only for one (relatively small) dataset,
 therefore, the result could be bound to the biases existing in it.
+\\
 Another one is the fact, that hyperparameters of NN (learning-rate, loss function etc.)
 were not fine-tuned, which leaves the question open whether the
 results presented have a causal relation with the choice of pretext task, or is it just correlation,
