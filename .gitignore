@@ -10,3 +10,7 @@ impl/.ipynb_checkpoints
 impl/__pycache__
 impl/.env
 impl/demo.ipynb
+results/plots
+results/tables
+results/.ipynb_checkpoints
+results/__pycache__
