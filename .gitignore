@@ -3,3 +3,10 @@
 skillshare
 related work
 presentation.key
+paper/.texpadtmp
+paper/out
+impl/models
+impl/.ipynb_checkpoints
+impl/__pycache__
+impl/.env
+impl/demo.ipynb
