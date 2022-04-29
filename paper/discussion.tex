@@ -10,16 +10,19 @@ accuracy~\cite{DBLP:journals/corr/abs-1912-01991, DBLP:journals/corr/NorooziF16,
 
 
 \paragraph{Observations and Interpretation}
-All 3 pre-training approaches have shown a slight improvement.
-Accuracy was increased by all pre-text tasks, with jigsaw performing the best and being up to 8\% more accurate.
-Transfer learning and no pre-training had shown no decrease in miss-classification rate.
-Rotation and jigsaw were able to reduce miss-classification rate up to 5\%, starting up from 45 training epochs.
-\st{pretext task enforce learning of important features ...}
+Pre-training NN on larger dataset, and the fine-tuning (transfer learning) was able to increase accuracy by up to 6\%,
+however no improvement were seen in miss-classification rate.
+In contrast, rotation and jigsaw were able to show up to 8\% accuracy improvements,
+and up to 5\% decrease in miss-classification  rate, starting up from 45 training epochs.
 \\
 Despite keeping the intensity of adversarial pattern fixed at a very low value($\epsilon = 0.01$),
 FGSM was still able to produce at least 95\% of miss-classifications.
 The explanation for this liest in fact, that FGSM evaluates loss function of NN,
 so it would be natural to assume that high standard classification accuracy pairs with high adversarial vulnerability.
+\\
+Nonetheless, rotation and jigsaw while providing even better improvements in accuracy than transfer leaning,
+were able to slightly reduce miss-classification rate.
+This concurs the theory, that self-supervised leaning framework improves the quality of representations learned by NN~\cite{kolesnikov2019revisiting}.
 \\
 The improvements seen in the results section, could also be caused by other factors, not only choice of pre-text task.
 For example, tf flowers consist of 3670 items.
@@ -48,7 +51,7 @@ investing more time in pre-training as well as using models with a bigger number
 a.e. \ EfficientNetB1, EfficientNetB2 \ldots EfficientNetB7.
 
 \paragraph{Conclusion}
-Including rotation or jigsaw pretext task in a training process had shown slight improvements in adversarial robustness.
+Including rotation or jigsaw pretext task in a training process had shown \textbf{very} slight improvements in adversarial robustness.
 However, it is not clear whether these improvements were caused by the choice of pretext task, or other factors.
 In conclusion, adversarial vulnerability remains an open topic,
 and researchers are still far from being able to solve it.
