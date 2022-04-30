@@ -24,7 +24,7 @@ Nonetheless, rotation and jigsaw while providing even better improvements in acc
 were able to slightly reduce miss-classification rate.
 This concurs the theory, that self-supervised leaning framework improves the quality of representations learned by NN~\cite{kolesnikov2019revisiting}.
 \\
-The improvements seen in the results section, could also be caused by other factors, not only choice of pre-text task.
+Improvements seen in the results section, could also be caused by other factors.
 For example, tf flowers consist of 3670 items.
 During pretext training, 4 pseudo classes were generated,
 which results in 14680 images, and \textbf{18350} images together with downstream training.
@@ -37,8 +37,8 @@ For an instance, the fact that the evaluation was done only for one (relatively 
 therefore, the result could be bound to the biases existing in it.
 In addition, that hyperparameters of NN (learning-rate, loss function etc.)
 were not fine-tuned, which leaves the question open whether the
-results presented have a causal relation with the choice of pretext task, or is it just correlation,
-and similar results could be achieved by better chosen hyperparameters for NN .
+results presented have a causal relation with the choice of pretext task,
+or similar results could be achieved by better chosen hyperparameters of NN.
 
 \paragraph{Future work}
 Despite all the recent advances in visual representation learning, and the success of ML in general, the phenomenon of
