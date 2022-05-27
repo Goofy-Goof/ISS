@@ -1,11 +1,11 @@
 \section{Introduction}
 
-In recent years, neural networks have had a lot of success in image classification.
+In recent years, Neural Networks (NNs) have had a lot of success in image classification.
 This has led to advances in many areas, including computer vision and object recognition.
 A.e.advances in a constantly ongoing ImageNet classification challenge, which were achieved
 through new approaches,
-rather than increasing NNs number of layers and parameters~\cite{russakovsky2015imagenet,DBLP:journals/corr/abs-1905-11946}~.
-However, neural networks are also vulnerable to adversarial attacks~\cite{ilyas2019adversarial}.
+rather than increasing NNs number of layers and parameters~\cite{russakovsky2015imagenet,DBLP:journals/corr/abs-1905-11946}.
+However, NNs are also vulnerable to adversarial attacks~\cite{ilyas2019adversarial}.
 Adversarial attacks are designed to fool neural networks into misclassifying data.
 This can have serious consequences, as it can lead to incorrect results or decisions.
 Typical approach to ensure robustness, would be adversarial training, however it can come with a cost of
@@ -21,19 +21,19 @@ Goodfellow defined adversarial attacks as “inputs to machine learning models t
 attacker has intentionally designed to cause the model to make a mistake.”
 ~\cite{DBLP:journals/corr/abs-1802-08195} \\
 In the domain of image classification, adversarial attacks are images usually formed by applying a small perturbation
-(which is barely noticeable for human viewer) to a naturally occurring image, with intention to make NN miss-classify.
+(which is barely noticeable for human viewer) to a naturally occurring image, with the intention of making NN miss-classify.
 There are many types of adversarial attacks,
 and the type of attack depends on the type of model that is being attacked.
-In this paper, I focus on the white-box attack, where the attacker has full access to the model and its parameters,
-namely Fast Gradient Sign Method.
+This paper focuses on the white-box attacks, where the attacker has full access to the model and its parameters,
+namely Fast Gradient Sign Method (FGSM).
 
-\paragraph{Fast gradient sign method}
+\paragraph{FGSM}
+
 This method was first introduced by Goodfellow and Jonathon Shlens and Christian Szegedy
 ~\cite{goodfellow2015explaining}.
 It produces adversarial images which make NN miss-classify,
 but are still recognisable as of the same class for human viewer.
-Fast gradient sign method (further denoted as FGSM) works
-by using the gradients of the neural network to create an adversarial pattern.
+FGSM works by using the gradients of the neural network to create an adversarial pattern.
 For an input image,
 the method evaluates the signed gradient of the loss function with respect to the input image to create a pattern,
 which maximises the loss.
@@ -76,9 +76,9 @@ $y$ is original label.
 \paragraph{Pretext task}
 Pretext task is the self-supervised learning task solved to learn visual representations,
 with the aim of using the learned representations or model weights obtained in the process, for the downstream task.
-It has been showm, that pretext tasks can significantly improve NNs accuracy~\cite{kolesnikov2019revisiting}.
+It has been shown, that pretext tasks can significantly improve NNs accuracy~\cite{kolesnikov2019revisiting}.
 It is also believed they contribute to NNs learning of important (as per human agents) features.
-In this paper I focus on rotation and jigsaw pre-text tasks.
+This paper focuses on rotation and jigsaw pre-text tasks.
 
 \paragraph{Rotation pretext task}
 A common choice of pretext task could be to produce 4 copies of
@@ -161,7 +161,11 @@ images were shuffled, and the last dense layer was replaced by a suitable one.
 
 
 \paragraph{Transfer learning}
-For transfer learning EffNet was pre-trained on "imagenette"~\cite{ImageNette} dataset for image classification.
+Transfer learning is an approach in ML, that focuses on storing knowledge gained while solving one problem and applying it to a different but related problem.
+For example, knowledge gained while learning to recognize cars could apply when trying to recognize trucks.
+For this paper, EffNet was pre-trained on "imagenette"~\cite{ImageNette} dataset for image classification. and then
+Imagenette is a subset of 10 easily classified classes from the Imagenet dataset.
+Afterwards the NN was fine-tuned for an actual classification task of interest on~\cite{tfflowers}.
 
 \paragraph{Adversarial Images with FGSM}
 My implementation of FGSM was based on \cite{FGSM}
@@ -193,6 +197,8 @@ Following metrics of interest were recorded:
 \begin{equation}
     \overline{Miss \; rate} = \frac{1}{N}  \sum_{i=1}^{N}{Miss \; rate_i}
 \end{equation}
+
+
 \\
 The dataset "tf\_flowers" \cite{tfflowers} was chosen for experiment, 5\% of dataset were reserved for evaluation.
 \\
