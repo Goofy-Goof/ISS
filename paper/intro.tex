@@ -49,9 +49,7 @@ $x$ is the original image, \\
 $\epsilon$ is the intensity of adversarial pattern, \\
 $J$ is the loss function, \\
 $\theta$ is NNs parameters, \\
-$y$ is original label.
-
-
+$y$ is the original label.
 \\
 \begin{figure}[h]
     \begin{subfigure}{0.4\textwidth}
@@ -80,21 +78,6 @@ It has been shown, that pretext tasks can significantly improve NNs accuracy~\ci
 It is also believed they contribute to NNs learning of important (as per human agents) features.
 This paper focuses on rotation and jigsaw pre-text tasks.
 
-\paragraph{Rotation pretext task}
-A common choice of pretext task could be to produce 4 copies of
-a single image by rotating it by {0°, 90°, 180°, 270°} and let a single network predict the rotation which was applied.
-Alexander Kolesnikov and Xiaohua Zhai and Lucas Beyer: "Intuitively, a good model should learn to
-recognize canonical orientations of objects in natural images" ~\cite{kolesnikov2019revisiting}.
-
-\paragraph{Jigsaw pretext task}
-The task is
-to recover relative spatial position of 4 sampled image patches
-after a random permutation of these patches was performed
-~\cite{kolesnikov2019revisiting}.
-All of these patches are concatenated in 'puzzle' image,
-which is later sent through same network, which needs to predict a permutation applied.
-
-
 
 \section{Methods}
 
@@ -106,12 +89,17 @@ previous architectures~\cite{DBLP:journals/corr/abs-1905-11946}.
 For this paper, the evaluation was done using it, namely EfficientNetB0~\cite{KerasEffNet}
 
 \paragraph{Rotation pretext task}
-Each image from the original dataset was rotated 0°, 90°, 180°,
+A common choice of pretext task could be to produce 4 copies of
+a single image by rotating it by {0°, 90°, 180°, 270°} and let a single network predict the rotation which was applied.
+Alexander Kolesnikov and Xiaohua Zhai and Lucas Beyer: "Intuitively, a good model should learn to
+recognize canonical orientations of objects in natural images" ~\cite{kolesnikov2019revisiting}.
+For this papers evaluation, each image from the original dataset was rotated 0°, 90°, 180°,
 270° and assigned a new pseudo label from [0, 1, 2, 3] accordingly.
 The examples of such images are shown in~\ref{fig:rot-fig}.
 All 4 batches of rotated images, as well as pseudo labels were concatenated in new dataset, and shuffled.
-Then the last dense layer of NN was replaced with a dense layer for the corresponding number of pseudo classes (4).
-Then the same model was then trained to identify rotation applied.
+Then EffNet was then trained to identify rotation applied, afterwards the convolutional layers were frozen,
+and the output layer size was adjusted for the downstream task.
+
 \begin{figure}[h]
     \begin{subfigure}{0.33\textwidth}
         \caption{Label = 0}
@@ -133,14 +121,21 @@ Then the same model was then trained to identify rotation applied.
 
 
 \paragraph{Jigsaw pretext task}
-For jigsaw, a similar approach as described by Mehdi Noroozi and Paolo Favaro~\cite{DBLP:journals/corr/NorooziF16} was adopted.
+The task is
+to recover relative spatial position of 4 sampled image patches
+after a random permutation of these patches was performed
+~\cite{kolesnikov2019revisiting}.
+All of these patches are concatenated in 'puzzle' image,
+which is later sent through same network, which needs to predict a permutation applied.\
+A similar approach as described by Mehdi Noroozi and Paolo Favaro~\cite{DBLP:journals/corr/NorooziF16} was adopted.
 Random 4 out of 24 possible permutations were chosen for each batch
 (number of possible permutation can be obtained from Newtonian binomial $P=\frac{r!}{(r-n)!}$).
 For each permutation, each image was cut in 4 equal parts,
-afterwards these tiles were permuted according to chosen permutation, and concatenated in 1 (puzzle) image.
+afterwards these tiles were permuted as per chosen permutation, and concatenated in 1 (puzzle) image.
 An example can be seen in~\ref{fig:jig-fig}.
 Similarly, to rotation pseudo labels in [0\ldots23] had been assigned,
-images were shuffled, and the last dense layer was replaced by a suitable one.
+NN was trained to identify permutation applied.
+Then the weights of convolutional layers were frozen and reused for the downstream task.
 
 \\
 \begin{figure}[h]
@@ -168,15 +163,12 @@ Imagenette is a subset of 10 easily classified classes from the Imagenet dataset
 Afterwards the NN was fine-tuned for an actual classification task of interest on~\cite{tfflowers}.
 
 \paragraph{Adversarial Images with FGSM}
-My implementation of FGSM was based on \cite{FGSM}
+The implementation of FGSM for this paper was based on \cite{FGSM}.
 In order to generate adversarial pattern for each image,
 gradient of loss function is evaluated with sign for each image.
-Then according to this formula:
-\begin{equation}
-    adv\_x = x + \epsilon \cdot sign(\nabla_x J(\theta, x, y))
-\end{equation}
-pattern was then added pixel wise to original image with $\epsilon = 0.01$.
-Resulting adversarial image was then clipped by value, so each pixel value stays in interval [0\ldots255],
+Then as per previously described approach,
+adversarial pattern was added pixel wise to the original image with $\epsilon = 0.01$.
+Resulting adversarial image was then clipped by value, so each channels' value stays in interval [0\ldots255],
 as required for RGB color encoding.
 
 \paragraph{Evaluation approach}
