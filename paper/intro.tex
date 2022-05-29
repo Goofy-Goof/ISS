@@ -8,11 +8,8 @@ rather than increasing NNs number of layers and parameters~\cite{russakovsky2015
 However, NNs are also vulnerable to adversarial attacks~\cite{ilyas2019adversarial}.
 Adversarial attacks are designed to fool neural networks into misclassifying data.
 This can have serious consequences, as it can lead to incorrect results or decisions.
-Typical approach to ensure robustness, would be adversarial training, however it can come with a cost of
-reduced standard classification accuracy~\cite{https://doi.org/10.48550/arxiv.1805.12152}.
-Pretext tasks had shown themselves to be usefully in improving accuracy~\cite{kolesnikov2019revisiting}.
-In this research, I would like to evaluate how including state-of-the-art pretext tasks in the training process
-influences NNs vulnerability to adversarial attacks.
+Assuring trust-worthiness of ML classifiers is researches obligation.
+
 
 \subsection{Background}
 
@@ -25,14 +22,14 @@ In the domain of image classification, adversarial attacks are images usually fo
 There are many types of adversarial attacks,
 and the type of attack depends on the type of model that is being attacked.
 This paper focuses on the white-box attacks, where the attacker has full access to the model and its parameters,
-namely Fast Gradient Sign Method (FGSM).
+namely FGSM.
 
 \paragraph{FGSM}
-
 This method was first introduced by Goodfellow and Jonathon Shlens and Christian Szegedy
 ~\cite{goodfellow2015explaining}.
 It produces adversarial images which make NN miss-classify,
 but are still recognisable as of the same class for human viewer.
+An example of such images can be seen in~\ref{fig:fig-adv}.
 FGSM works by using the gradients of the neural network to create an adversarial pattern.
 For an input image,
 the method evaluates the signed gradient of the loss function with respect to the input image to create a pattern,
@@ -69,6 +66,9 @@ $y$ is the original label.
         \caption{$\epsilon = 0.1$, Roses 40\% confidence}
         \includegraphics[width=8cm]{images/adv_attack_01}
     \end{subfigure}
+
+    \caption{An example image, adversarial pattern created from it, and adversarial attack with different values of $\epsilon$}
+    \label{fig:fig-adv}
 \end{figure}
 
 \paragraph{Pretext task}
@@ -76,7 +76,22 @@ Pretext task is the self-supervised learning task solved to learn visual represe
 with the aim of using the learned representations or model weights obtained in the process, for the downstream task.
 It has been shown, that pretext tasks can significantly improve NNs accuracy~\cite{kolesnikov2019revisiting}.
 It is also believed they contribute to NNs learning of important (as per human agents) features.
-This paper focuses on rotation and jigsaw pre-text tasks.
+This paper focuses on transfer learning, rotation and jigsaw pre-text tasks.
+
+
+\paragraph{Related wörk}
+Adversarial vulnerability phenomenon is widely known, first described by Ian J. Goodfellow~\cite{goodfellow2015explaining}.
+It has been the accompanying success of image classification over the last years.
+Up to day, there is no clear solution to this problem.
+One of the suggested approaches is Adversarial Training~\cite{https://doi.org/10.48550/arxiv.1805.12152},
+during which NN is trained to reduce the loss over worst-case adversarial perturbations.
+This, however, comes at a cost of decreased standard classification accuracy, not the least this approach is noticeably more time-consuming
+There have also been numerous studies~\cite{kolesnikov2019revisiting,DBLP:journals/corr/NorooziF16,DBLP:journals/corr/abs-1912-01991}
+on how pretext tasks, and their choice can influence standard classification accuracy.
+On the other hand, there were no studies, which investigated the impact of pretext task choice on
+adversarial vulnerability. \\
+This study was motivated by \st{curiosity} increasing demand in highly accurate robust trust-worthy ML classifiers.
+
 
 
 \section{Methods}
@@ -179,13 +194,18 @@ Following metrics of interest were recorded:
 
 \begin{equation}
     Accuracy_i = \frac{\# \; images \; correctly \; classified_i}{\# \; test \; images_i} \cdot 100 \%
-\end{equation}
+\end{equation} \\
+where Accuracy\_i is the accuracy in each evaluation round \\
+\# stands for "number".
 \begin{equation}
     \overline{Accuracy} = \frac{1}{N}  \sum_{i=1}^{N}{Accuracy_i}
 \end{equation}
+
+
 \begin{equation}
     Miss \; rate_i = \frac{\# images \; miss \; classified_i}{\# \; images \; correctly \; classified_i} \cdot 100 \%
 \end{equation}
+where Miss rate\_i is the miss rate in each evaluation round.
 \begin{equation}
     \overline{Miss \; rate} = \frac{1}{N}  \sum_{i=1}^{N}{Miss \; rate_i}
 \end{equation}
