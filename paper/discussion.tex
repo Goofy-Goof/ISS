@@ -11,24 +11,29 @@ Parallel to this accuracy in each evaluation was recorded, as only robust classi
 classification accuracy make sense.
 Recorded accuracy simply represents number of images, which were correctly classified before applying FGSM.
 
-
 \paragraph{Observations and Interpretation}
-Pre-training NN on larger dataset, and the fine-tuning (transfer learning) was able to increase accuracy by up to 6\%.
-However, no improvement was seen in the miss-classification rate.
-In contrast, rotation and jigsaw were able to show up to 8\% accuracy improvements,
-and up to 5\% decrease in miss-classification rate, starting up from 45 training epochs.
+All 3 pre-training approaches have shown an improvement in accuracy, which was expected.
+Self-supervised pre-training tasks (rotation and jigsaw) in contrast to transfer learning had shown a decrease
+in miss-rate.
+This means that NN pre-trained in a self-supervised manner, would be less likely fooled by an adversarial image.
 \\
 Despite keeping the intensity of adversarial pattern fixed at a very low value($\epsilon = 0.01$),
 FGSM was still able to produce at least 95\% of miss-classifications.
 The explanation for this liest in fact, that FGSM evaluates loss function of NN,
-so it would be natural to assume that high standard classification accuracy pairs with high adversarial vulnerability.
-\\
-Nonetheless, rotation and jigsaw while providing even better improvements in accuracy than transfer learning,
-were able to slightly reduce miss-classification rate.
-This concurs the theory,
-that self-supervised leaning framework improves the quality of representations
-learned by NN~\cite{kolesnikov2019revisiting}.
+so it would be natural to assume that high standard classification accuracy pairs with high adversarial vulnerability
+\cite{https://doi.org/10.48550/arxiv.1805.12152}.
+This correlation can be seen when comparing the result for "no pre-training" and "transfer-learning".
+In contraast to that, the resault for jigsaw and rotation show an inmcrease in accuracy, as well
+as decrease in miss rate.
+This mean choosing self-supervised pre-training approach is likely to result in more robust classifier,
+which in addition is also more accurate.
 
+The best results can be seen for jigsaw, with pre-training executed for 45 epochs.
+After pre-training time starts to dominate downstream training, a.e 100 vs 30 in our case,
+decrease in accuracy and increase in miss rate can be seen, which shows that it's also importantr
+not to "abuse" self-supervised training, in favor to actual downstream task.
+In general the observations concur to the theory, that self-supervised leaning framework improves the quality of representations
+learned by NN~\cite{kolesnikov2019revisiting}.
 
 
 \paragraph{Limitations \&\& Future work}
@@ -47,31 +52,30 @@ During pretext training, 4 pseudo classes were generated,
 which results in 14680 images, and \textbf{18350} images together with downstream training.
 Imagenette consists of 13,394, which results in \textbf{17064} images together with downstream training.
 
-\paragraph{Future work}
-Despite all the recent advances in visual representation learning, and the success of ML in general, the phenomenon of
-adversarial vulnerability still remains unsolved.
-ML provides a lot of fascinating possibilities, hence its reliability and robustness are still an open question.
-Researchers should explore new methods and approaches to ensure them.
-Concrete for pretext-tasks, this research could be extended by doing similar evaluation on different datasets,
-fine-tuning NNs hyperparameters,
-investing more time in pre-training as well as using models with a bigger number of trainable parameters
-a.e. \ EfficientNetB1, EfficientNetB2 \ldots EfficientNetB7.
 
-\paragraph{Conclusion}
-Including rotation or jigsaw pretext task in a training process had shown \textbf{very} slight improvements in adversarial robustness.
+
+\paragraph{Conclusion \&\& Future Work}
+Including self-supervised pretext task in a training process had shown slight improvements in adversarial robustness.
 However, it is not clear whether these improvements were caused by the choice of pretext task, or other factors.
-Unfortunatelly the quality and amount of data is not sufficient to draw a concrete conlusion from it.
-Extending this research, by using different NNs with better fine-tuned hyperparameters, evaluation similar metrics on
-multiple different datasets and other pretext tasks could provide a solid foundaton for a knowledge how a pretext task choice
-infuences adversarial vulnerability.
+
+The amount of data is not sufficient to draw a concrete conclusion from it.
+In order to achieve a solid foundation for understanding how a choice of pretext-task influences adversarial vulnerability,
+this reaserch could be extended in folowing ways.
+\begin{itemize}
+    \item Use nultiple different models, with bigger number of trainable parameters
+    \item fine-tunning NN hyperparameters before evaluation
+    \item run evaluatio on multiple bigger datasets
+    \item inclide more self-supervised tasks in evaluation
+    \item invest more time in pre-text as well as downstream training
+\end{itemize}
 
 
 In conclusion, adversarial vulnerability remains an open topic,
 and researchers are still far from being able to solve it.
 This investigation was not able to show any substantial improvements in adversarial robustness.
 \\
-Nevertheless, rotation and jigsaw had once again been proved useful in increasing standard classification accuracy.
-Therefore, it would be safe to say,
-that including either of those in the training process could be considered a good practise.
+Nevertheless, rotation and jigsaw had once again been proved useful in increasing standard classification accuracy,
+and in addition made out classifiers slightly less adversarial vulnerable.
+Therefore, it would be safe to say, that including either of those in the training process could be considered a good practise.
 
 

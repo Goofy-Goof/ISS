@@ -28,8 +28,8 @@ def get_acc_and_miss(res_db, task, pr_epochs):
             [*map(lambda xx: xx['total_test_images'],
                   filter(lambda x: x['pretext_epochs'] == pr_ep, res))]
         ) for pr_ep in pr_epochs])
-    accuracy = np.round(predicted / total_images * 100, 3)
-    miss_rate = np.round(miss / predicted * 100)
+    accuracy = predicted / total_images * 100
+    miss_rate = miss / predicted * 100
     return accuracy, miss_rate
 
 
