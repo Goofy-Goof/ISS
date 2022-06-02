@@ -1,27 +1,24 @@
 \section{Introduction}
 
-In recent years, Neural Networks (NNs) have had a lot of success in image classification.
+\paragraph{Motivation}
+In recent years, Neural NNs have had a lot of success in image classification.
 This has led to advances in many areas, including computer vision and object recognition.
-A.e.advances in a constantly ongoing ImageNet classification challenge, which were achieved
+E.g. advances in a constantly ongoing "ImageNet classification challenge", which were achieved
 through new approaches,
 rather than increasing NNs number of layers and parameters~\cite{russakovsky2015imagenet,DBLP:journals/corr/abs-1905-11946}.
 However, NNs are also vulnerable to adversarial attacks~\cite{ilyas2019adversarial}.
-Adversarial attacks are designed to fool neural networks into misclassifying data.
+Adversarial attacks are designed to fool neural networks into miss-classifying data.
 This can have serious consequences, as it can lead to incorrect results or decisions.
 Assuring trust-worthiness of ML classifiers is researches obligation.
-
-
-\subsection{Background}
 
 \paragraph{Adversarial attack}
 Goodfellow defined adversarial attacks as “inputs to machine learning models that an
 attacker has intentionally designed to cause the model to make a mistake.”
 ~\cite{DBLP:journals/corr/abs-1802-08195} \\
-In the domain of image classification, adversarial attacks are images usually formed by applying a small perturbation
-(which is barely noticeable for human viewer) to a naturally occurring image, with the intention of making NN miss-classify.
-There are many types of adversarial attacks,
-and the type of attack depends on the type of model that is being attacked.
-This paper focuses on the white-box attacks, where the attacker has full access to the model and its parameters,
+In the domain of image classification, adversarial attacks are usually formed by applying a small perturbation (which
+is barely noticeable for human viewer) to a naturally occurring image, with the intention of making NN miss-classify.
+There are many types of adversarial attacks.
+This paper focuses on white-box attacks, where the attacker has full access to the model and its parameters,
 namely FGSM.
 
 \paragraph{FGSM}
@@ -33,8 +30,8 @@ An example of such images can be seen in~\ref{fig:fig-adv}.
 FGSM works by using the gradients of the neural network to create an adversarial pattern.
 For an input image,
 the method evaluates the signed gradient of the loss function with respect to the input image to create a pattern,
-which maximises the loss.
-The pattern is then added pixel wise to original image.
+which maximizes the loss.
+The pattern is then added pixel wise to the original image.
 The new image is called the adversarial image.
 The process can be summarised using the following expression:
 \begin{equation}
@@ -71,12 +68,53 @@ $y$ is the original label.
     \label{fig:fig-adv}
 \end{figure}
 
+
+
+\paragraph{some meanigfull transition} bla bla bla
+\\
+\\
+One should always want to train ML classifier, in such a way, which maximizes generalization.
+Naive approach for this would be to provide as much diverse training data as possible.
+This approach, however, heavily relies on a collection and labeling of data by humans, which is an extremely time-consuming
+
+\paragraph{Transfer Learning}
+Another popular technic aiming to improve ML classifiers accuracy is called Transfer Learning (TL).
+TL is a training approach in ML, which focuses on storing knowledge gained while solving one
+problem and applying it to a different but related problem.
+
+For example, knowledge gained while learning to recognize cars could apply when trying to recognize trucks.
+Concrete for ML engineers this could mean reusing one of the NNs, which performed the best at e.g.
+"ImageNet classification challenge", and then fine-tuning it for a concrete downstream task of interest.
+This eliminated the need of collecting and labeling more data for concrete classification problem,
+however, it still heavily relies on the existence of big labeled datasets.
+Not to forget, that while NN reuses the learned features, the NN will also reuse
+the biases learned from previous datasets, which makes them once again more dependable on labeling previously done by a human.
+
+
+\paragraph{Self-Supervised Learning Framework}
+In contrast to previously described frameworks, the Self-Supervised Learning framework, requires relatively small amount
+of data to produce a big variety of labeled training data.
+One of its core features, is that
+labeling of new data is not dependent on humans, and can be done in seconds by the ML classifier itself.
+
+E.g. NN applies multiple pre-defined data augmentations to existing data and overwrite the labels by corresponding
+pseudo-labels, and then is trained to predict which one was applied.
+This allows multiplying the size of
+training dataset by a number of pre-defined documentations, and also increasing the diversity of training data a
+(the metric to measure this, is out of the scope of this paper).
+
+Normally, after self-supervised learning, similarly to TL fine-tuning would be executed.
+These parts of training are called pre-text task (or training) and downstream task (or training) respectively.
+
 \paragraph{Pretext task}
 Pretext task is the self-supervised learning task solved to learn visual representations,
 with the aim of using the learned representations or model weights obtained in the process, for the downstream task.
-It has been shown, that pretext tasks can significantly improve NNs accuracy~\cite{kolesnikov2019revisiting}.
+More concrete for image-classification, the weights of convolutional layers will be frozen after pre-text training,
+with the aim of reusing the features learned, similarly to TL.
+
+It has been shown that pretext tasks can significantly improve NNs accuracy~\cite{kolesnikov2019revisiting}.
 It is also believed they contribute to NNs learning of important (as per human agents) features.
-This paper focuses on transfer learning, rotation and jigsaw pre-text tasks.
+This paper focuses on TL, rotation and jigsaw pre-text tasks.
 
 
 \paragraph{Related wörk}
@@ -170,9 +208,7 @@ Then the weights of convolutional layers were frozen and reused for the downstre
 \end{figure}
 
 
-\paragraph{Transfer learning}
-Transfer learning is an approach in ML, that focuses on storing knowledge gained while solving one problem and applying it to a different but related problem.
-For example, knowledge gained while learning to recognize cars could apply when trying to recognize trucks.
+
 For this paper, EffNet was pre-trained on "imagenette"~\cite{ImageNette} dataset for image classification. and then
 Imagenette is a subset of 10 easily classified classes from the Imagenet dataset.
 Afterwards the NN was fine-tuned for an actual classification task of interest on~\cite{tfflowers}.
