@@ -69,11 +69,7 @@ $y$ is the original label.
 \end{figure}
 
 
-
-\paragraph{some meanigfull transition} bla bla bla
-\\
-\\
-One should always want to train ML classifier, in such a way, which maximizes generalization.
+Naturally, one would always want to train ML classifier in such a way, that it generalizes well.
 Naive approach for this would be to provide as much diverse training data as possible.
 This approach, however, heavily relies on a collection and labeling of data by humans, which is an extremely time-consuming
 
@@ -84,7 +80,7 @@ problem and applying it to a different but related problem.
 For example, knowledge gained while learning to recognize cars could apply when trying to recognize trucks.
 Concrete for ML engineers this could mean reusing one of the NNs, which performed the best at e.g.
 "ImageNet classification challenge", and then fine-tuning it for a concrete downstream task of interest.
-This eliminated the need of collecting and labeling more data for a concrete classification problem,
+This eliminates the need of collecting and labeling more data for a concrete classification problem,
 however, it still heavily relies on the existence of big labeled datasets.
 Not to forget, that while NN reuses the learned features, the NN will also reuse
 the biases learned from previous datasets, which makes them once again more dependable on quality of data
@@ -92,12 +88,12 @@ collected previously by a human.
 
 
 \paragraph{Self-Supervised Learning Framework}
-In contrast to previously described frameworks, the Self-Supervised Learning framework, requires relatively small amount
-of data to produce a big variety of labeled training data.
+In contrast to previously described approaches, the Self-Supervised Learning framework,
+requires a relatively small amount of data to produce a big variety of labeled training data.
 One of its core features, is that
 labeling of new data is not dependent on humans, and can be done in seconds by the ML classifier itself.
 E.g. NN applies multiple pre-defined data augmentations to existing data and overwrites the labels by corresponding
-pseudo-labels, and then is trained to predict which one was applied.
+pseudo-labels, and then is trained to predict which ones were applied.
 This allows multiplying the size of
 training dataset by a number of pre-defined documentations, and also increasing the diversity of training data
 (the metric to measure this, is out of the scope of this paper).
@@ -119,15 +115,20 @@ This paper focuses on TL, rotation and jigsaw pre-text tasks.
 \paragraph{Related wörk}
 The adversarial vulnerability phenomenon is widely known, first described by Ian J. Goodfellow~\cite{goodfellow2015explaining}.
 It has been the accompanying success of image classification over the last years.
+As per Ian J. Goodfellow, Jonathon Shlens and Christian Szegedy~\cite{goodfellow2015explaining}
+adversarial examples are not caused by insufficient regularization, and they are not purely supervised learning problem.
 Up to day, there is no clear solution to this problem.
 One of the suggested approaches is Adversarial Training~\cite{https://doi.org/10.48550/arxiv.1805.12152},
 during which NN is trained to reduce the loss over worst-case adversarial perturbations.
 This, however, comes at a cost of decreased standard classification accuracy, not the least this approach is noticeably more time-consuming
 There have also been numerous studies~\cite{kolesnikov2019revisiting,DBLP:journals/corr/NorooziF16,DBLP:journals/corr/abs-1912-01991}
 on how pretext tasks, and their choice can influence standard classification accuracy.
-On the other hand, there were no studies, which investigated the impact of pretext task choice on
+While~\cite{goodfellow2015explaining} Ian J. Goodfellow, Jonathon Shlens and Christian Szegedy have shown, that
+generic regularization strategies such as dropout, pretraining, and model averaging do
+not confer a significant reduction in a model’s vulnerability to adversarial examples,
+there were no studies, which investigated the impact of pretext task choice on
 adversarial vulnerability. \\
-This study was motivated by \st{curiosity} increasing demand in highly accurate robust trust-worthy ML classifiers.
+This study was motivated by increasing demand in highly accurate robust trust-worthy ML classifiers.
 
 
 

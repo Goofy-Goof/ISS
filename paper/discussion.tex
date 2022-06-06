@@ -8,7 +8,7 @@ The miss rate shows how likely is it for fine-tuned NN to be fooled by an FGSM a
 with $\epsilon = 0.01$.
 Naturally, the lower values of the miss-rate, are what should be aimed for.
 Parallel to this accuracy in each evaluation was recorded, as only robust classifiers, which retain high standard
-classification accuracy make sense.
+are what should be aimed for.
 Recorded accuracy simply represents number of images, which were correctly classified before applying FGSM.
 
 \paragraph{Observations \&\& Interpretations} As it can be seen on~\ref{fig:figure-1},
@@ -29,7 +29,7 @@ as decrease in miss rate.
 This means choosing a self-supervised pre-training approach is likely to result in a more robust classifier,
 which in addition is also more accurate.
 The best results can be seen for jigsaw, with pre-training executed for 45 epochs.
-After pre-training time starts to dominate downstream training, a.e 100 vs 30 in our case,
+After pre-training time starts to dominate downstream training, e.g.\ 100 vs 30 in our case,
 decrease in accuracy and an increase in miss rate can be seen, which shows that it's also important
 not to "abuse" self-supervised training, in favor to an actual downstream task.
 In general, the observations concur to the theory,
