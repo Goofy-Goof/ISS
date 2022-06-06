@@ -69,9 +69,11 @@ $y$ is the original label.
 \end{figure}
 
 
-Naturally, one would always want to train ML classifier in such a way, that it generalizes well.
+Naturally,
+one would always want to train ML classifier in such a way, that it generalizes well.
 Naive approach for this would be to provide as much diverse training data as possible.
-This approach, however, heavily relies on a collection and labeling of data by humans, which is an extremely time-consuming
+This approach, however, heavily relies on a collection and labeling of data by humans, which is an extremely
+time-consuming task.
 
 \paragraph{Transfer Learning}
 Another popular technic aiming to improve ML classifiers accuracy is called Transfer Learning (TL).
@@ -89,15 +91,15 @@ collected previously by a human.
 
 \paragraph{Self-Supervised Learning Framework}
 In contrast to previously described approaches, the Self-Supervised Learning framework,
-requires a relatively small amount of data to produce a big variety of labeled training data.
+requires a relatively small amount of data to construct a pretext task.
 One of its core features, is that
 labeling of new data is not dependent on humans, and can be done in seconds by the ML classifier itself.
 E.g. NN applies multiple pre-defined data augmentations to existing data and overwrites the labels by corresponding
 pseudo-labels, and then is trained to predict which ones were applied.
 This allows multiplying the size of
-training dataset by a number of pre-defined documentations, and also increasing the diversity of training data
+training dataset by a number of pre-defined augmentations, and also increasing the diversity of training data
 (the metric to measure this, is out of the scope of this paper).
-
+\\
 Normally, after self-supervised learning, similarly to TL fine-tuning would be executed.
 These parts of training are called pre-text task (or training) and downstream task (or training) respectively.
 
@@ -106,13 +108,13 @@ Pretext task is the self-supervised learning task solved to learn visual represe
 with the aim of using the learned representations or model weights obtained in the process, for the downstream task.
 More concrete for image-classification, the weights of convolutional layers will be frozen after pre-text training,
 with the aim of reusing the features learned, similarly to TL.
-
+\\
 It has been shown that pretext tasks can significantly improve NNs accuracy~\cite{kolesnikov2019revisiting}.
 It is also believed they contribute to NNs learning of important (as per human agents) features.
 This paper focuses on TL, rotation and jigsaw pre-text tasks.
 
 
-\paragraph{Related wörk}
+\paragraph{Related work}
 The adversarial vulnerability phenomenon is widely known, first described by Ian J. Goodfellow~\cite{goodfellow2015explaining}.
 It has been the accompanying success of image classification over the last years.
 As per Ian J. Goodfellow, Jonathon Shlens and Christian Szegedy~\cite{goodfellow2015explaining}

@@ -8,7 +8,7 @@ The miss rate shows how likely is it for fine-tuned NN to be fooled by an FGSM a
 with $\epsilon = 0.01$.
 Naturally, the lower values of the miss-rate, are what should be aimed for.
 Parallel to this accuracy in each evaluation was recorded, as only robust classifiers, which retain high standard
-are what should be aimed for.
+are desired.
 Recorded accuracy simply represents number of images, which were correctly classified before applying FGSM.
 
 \paragraph{Observations \&\& Interpretations} As it can be seen on~\ref{fig:figure-1},
@@ -46,8 +46,7 @@ were not fine-tuned, which leaves the question open whether the
 results presented have a causal relation with the choice of pretext task,
 or similar results could be achieved by better chosen hyperparameters of NN.
 
-Improvements seen in the results section, could also be caused by other factors.
-For example, the amount of training data.
+Other factors could also cause improvements seen in the results section, for example, the amount of training data.
 TF flowers consist of 3670 items.
 During pretext training, 4 pseudo classes were generated,
 which results in 14680 images, and \textbf{18350} images together with downstream training.

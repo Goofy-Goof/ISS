@@ -106,14 +106,12 @@ where Accuracy\_i is the accuracy in each evaluation round \\
     Miss \; rate_i = \frac{\# images \; miss \; classified_i}{\# \; images \; correctly \; classified_i} \cdot 100 \%
 \end{equation}
 where Miss rate\_i is the miss rate in each evaluation round.
-
-
-The dataset "tf\_flowers"~\cite{tfflowers} was chosen for experiment, 5\% of dataset were reserved for evaluation.
 \\
+\\
+The dataset "tf\_flowers"~\cite{tfflowers} was chosen for experiment, 5\% of dataset were reserved for evaluation.
 During each evaluation round NN network was pre-trained either with transfer learning, or rotation, or jigsaw.
 The number of training epochs was varied in [15, 30, 45, 60] for pretext training, while the number of epochs for downstream
 training was fixed at 30.
-\\
 The reserved for evaluation images were given to NN. The number of correct classifications was recorded.
 Then, for each previously correctly classified image FGSM~\ref{eq:adv} with $\epsilon = 0.01$ was applied.
 The number of miss-classifications was recorded afterwards \footnote{For details about evaluation implementations please refer to
