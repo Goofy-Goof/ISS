@@ -1,7 +1,13 @@
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+from __future__ import with_statement
+from __future__ import annotations
+
 import argparse
-from util.utils import init_tpu
-from util.evaluation import eval_no_pretext, eval_jigsaw, eval_rotation, eval_transfer_learning
-from util.config import PRETEXT_EPOCHS, DOWNSTREAM_EPOCHS
+import tensorflow as tf # noqa
+
+from util import *
 
 
 def main(task, device, iterations, pretext_epochs, downstream_epochs):
@@ -55,9 +61,16 @@ def parse_args():
     return parser.parse_args()
 
 
+'''
+use _device = tf.distribute.OneDeviceStrategy() if running locally in CPU
+In case of computational GPU clusters, use one from https://www.tensorflow.org/guide/distributed_training
+TPUs are the best though :)
+'''
+
 if __name__ == '__main__':
     args = parse_args()
     _device = init_tpu()
+    # _device = tf.distribute.OneDeviceStrategy()
     main(
         task=args.task,
         device=_device,
