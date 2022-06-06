@@ -4,7 +4,7 @@ import numpy as np
 from .dataset import Dataset
 from .config import BATCH_SIZE
 import os
-from tensorflow.keras.applications import EfficientNetB0
+from tensorflow.keras.applications import EfficientNetB0 # noqa
 
 DEF_LOSS = tf.keras.losses.SparseCategoricalCrossentropy()
 DEF_METRIC = ['accuracy']

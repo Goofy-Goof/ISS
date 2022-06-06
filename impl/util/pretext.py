@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 import tensorflow as tf
-from tensorflow.keras import layers
+from tensorflow.keras import layers # noqa
 from .config import IMG_WIDTH, IMG_HEIGHT, BATCH_SIZE
 from functools import reduce
 from itertools import permutations

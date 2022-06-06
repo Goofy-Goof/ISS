@@ -1,63 +1,20 @@
 \section{Results}
 
-\paragraph{Baseline results}
-\begin{itemize}
-    \item  $\overline{Accuracy} = 37.285  \%$
-    \item  $\overline{Miss \; rate} = 99.097 \%$
-\end{itemize}
+\begin{center}
 
-\begin{table}[h]
-    \begin{tabular}{|r|r|r|}
-        \hline
-        \# Pre-text epochs & \overline{Accuracy}, \% & \overline{Miss \; rate}, \% \\
-        \hline
-        15                 & 43.004                  & 100.0                       \\
-        30                 & 43.533                  & 100.0                       \\
-        45                 & 42.882                  & 100.0                       \\
-        60                 & 42.882                  & 100.0                       \\
-        \hline
-    \end{tabular}
-    \caption{\label{tab:table-01}Transfer learning results}
-\end{table}
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.75\textwidth]{images/acc}
+        \caption{\label{fig:figure-1}Accuracy comparison}
+    \end{figure}
 
-\begin{table}[h]
-    \begin{tabular}{|r|r|r|}
-        \hline
-        \# Pre-text epochs & \overline{Accuracy}, \% & \overline{Miss \; rate}, \% \\
-        \hline
-        15                 & 44.312                  & 96.325                      \\
-        30                 & 44.482                  & 95.380                      \\
-        45                 & 44.751                  & 95.115                      \\
-        60                 & 42.603                  & 96.527                      \\
-        \hline
-    \end{tabular}
-    \caption{\label{tab:table-1}Jigsaw results}
-\end{table}
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.75\textwidth]{images/miss}
+        \caption{\label{fig:figure-2}Miss rate comparison}
+    \end{figure}
 
-\begin{table}[h]
-    \begin{tabular}{|r|r|r|}
-        \hline
-        \# Pre-text epochs & \overline{Accuracy}, \% & \overline{Miss \; rate}, \% \\
-        \hline
-        15                 & 41.889                  & 99.067                      \\
-        30                 & 43.865                  & 97.581                      \\
-        45                 & 43.865                  & 95.547                      \\
-        60                 & 43.290                  & 97.135                      \\
-        \hline
-    \end{tabular}
-    \caption{\label{tab:table-2}Rotation results}
-\end{table}
-
-
-\begin{figure}
-    \includegraphics{images/acc}
-    \caption{\label{fig:figure-1}Accuracy comparison}
-\end{figure}
-
-\begin{figure}
-    \includegraphics{images/miss_rate}
-    \caption{\label{fig:figure-2}Miss rate comparison}
-\end{figure}
+\end{center}
 
 
 

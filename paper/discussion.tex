@@ -1,38 +1,44 @@
 \section{Discussion}
 
-\paragraph{Goal}In this paper, I set up a goal to investigate if including a pretext task in the training process could reduce NNs
-vulnerability against adversarial attacks.
-The phenomenon of adversarial examples was extensively studied~\cite{ilyas2019adversarial, DBLP:journals/corr/abs-1802-08195, goodfellow2015explaining},
-as well as its relation with standard accuracy~\cite{https://doi.org/10.48550/arxiv.1805.12152}.
-However, ss to the day, there have been no studies of how choice of pretext task influences adversarial vulnerability.
-There are also numerous studies about the influence of pretext tasks on standard
-accuracy~\cite{DBLP:journals/corr/abs-1912-01991, DBLP:journals/corr/NorooziF16, kolesnikov2019revisiting}.
+\paragraph{Goal}In this paper,
+the goal of investigating how a choice of pretext task can influence NNs adversarial vulnerability was set up.
+To address this question, the average of miss rate over 20 evaluation rounds for different pretext tasks was compared
+(while to keeping $\epsilon$ fixed at 0.01).
+The miss rate shows how likely is it for fine-tuned NN to be fooled by an FGSM adversarial attack,
+with $\epsilon = 0.01$.
+Naturally, the lower values of the miss-rate, are what should be aimed for.
+Parallel to this accuracy in each evaluation was recorded, as only robust classifiers, which retain high standard
+are desired.
+Recorded accuracy simply represents number of images, which were correctly classified before applying FGSM.
 
-
-\paragraph{Observations and Interpretation}
-Pre-training NN on larger dataset, and the fine-tuning (transfer learning) was able to increase accuracy by up to 6\%,
-however no improvement were seen in miss-classification rate.
-In contrast, rotation and jigsaw were able to show up to 8\% accuracy improvements,
-and up to 5\% decrease in miss-classification  rate, starting up from 45 training epochs.
+\paragraph{Observations \&\& Interpretations} As it can be seen on~\ref{fig:figure-1},
+all 3 pre-training approaches have shown an improvement in accuracy which was expected.
+Self-supervised pre-training tasks (rotation and jigsaw) in contrast to TL had shown a decrease
+in miss-rate.
+This means that NN pre-trained in a self-supervised manner, would be less likely fooled by an adversarial image.
 \\
 Despite keeping the intensity of adversarial pattern fixed at a very low value($\epsilon = 0.01$),
-FGSM was still able to produce at least 95\% of miss-classifications.
+FGSM was still able to produce at least 95\% of miss-classifications (this can be seen on~\ref{fig:figure-2}).
 The explanation for this liest in fact, that FGSM evaluates loss function of NN,
-so it would be natural to assume that high standard classification accuracy pairs with high adversarial vulnerability.
+so it would be natural to assume that high standard classification accuracy pairs with high adversarial vulnerability
+\cite{https://doi.org/10.48550/arxiv.1805.12152}.
+This correlation can be seen when comparing the result for "no pre-training" and "transfer-learning".
 \\
-Nonetheless, rotation and jigsaw while providing even better improvements in accuracy than transfer leaning,
-were able to slightly reduce miss-classification rate.
-This concurs the theory, that self-supervised leaning framework improves the quality of representations learned by NN~\cite{kolesnikov2019revisiting}.
-\\
-Improvements seen in the results section, could also be caused by other factors.
-For example, tf flowers consist of 3670 items.
-During pretext training, 4 pseudo classes were generated,
-which results in 14680 images, and \textbf{18350} images together with downstream training.
-Imagenette consists of 13,394, which results in \textbf{17064} images together with downstream training.
-So the better results for jigsaw and rotation, compared with transfer learning,
-could also be caused by bigger training dataset size.
+In contrast to that, the results for jigsaw and rotation show an increase in accuracy, as well
+as decrease in miss rate.
+This means choosing a self-supervised pre-training approach is likely to result in a more robust classifier,
+which in addition is also more accurate.
+The best results can be seen for jigsaw, with pre-training executed for 45 epochs.
+After pre-training time starts to dominate downstream training, e.g.\ 100 vs 30 in our case,
+decrease in accuracy and an increase in miss rate can be seen, which shows that it's also important
+not to "abuse" self-supervised training, in favor to an actual downstream task.
+In general, the observations concur to the theory,
+that self-supervised leaning framework improves the quality of representations
+learned by NN~\cite{kolesnikov2019revisiting}.
 
-\paragraph{Limitations}This study naturally comes with a few limitations.
+
+\paragraph{Limitations \&\& Future work}
+This study naturally comes with a few limitations.
 For an instance, the fact that the evaluation was done only for one (relatively small) dataset,
 therefore, the result could be bound to the biases existing in it.
 In addition, that hyperparameters of NN (learning-rate, loss function etc.)
@@ -40,24 +46,35 @@ were not fine-tuned, which leaves the question open whether the
 results presented have a causal relation with the choice of pretext task,
 or similar results could be achieved by better chosen hyperparameters of NN.
 
-\paragraph{Future work}
-Despite all the recent advances in visual representation learning, and the success of ML in general, the phenomenon of
-adversarial vulnerability still remains unsolved.
-ML provides a lot of fascinating possibilities, hence its reliability and robustness are still an open question.
-Researchers should explore new methods and approaches to ensure them.
-Concrete for pretext-tasks, this research could be extended by doing similar evaluation on different datasets,
-fine-tuning NNs hyperparameters,
-investing more time in pre-training as well as using models with a bigger number of trainable parameters
-a.e. \ EfficientNetB1, EfficientNetB2 \ldots EfficientNetB7.
+Other factors could also cause improvements seen in the results section, for example, the amount of training data.
+TF flowers consist of 3670 items.
+During pretext training, 4 pseudo classes were generated,
+which results in 14680 images, and \textbf{18350} images together with downstream training.
+Imagenette consists of 13,394, which results in \textbf{17064} images together with downstream training.
 
-\paragraph{Conclusion}
-Including rotation or jigsaw pretext task in a training process had shown \textbf{very} slight improvements in adversarial robustness.
+
+
+\paragraph{Conclusion \&\& Future Work}
+Including a self-supervised pretext task in a training process had shown slight improvements in adversarial robustness.
 However, it is not clear whether these improvements were caused by the choice of pretext task, or other factors.
+\\
+The amount of data is not sufficient to draw a concrete conclusion from it.
+In order to achieve a solid foundation for understanding how a choice of pretext-task influences adversarial vulnerability,
+this research could be extended in the following ways:
+\begin{itemize}
+    \item fine tuning NN hyperparameters before evaluation
+    \item run evaluation on multiple bigger datasets
+    \item invest more time in pre-text as well as downstream training
+\end{itemize}
+
+
 In conclusion, adversarial vulnerability remains an open topic,
 and researchers are still far from being able to solve it.
-This investigation was not able to show any substantial improvements in adversarial robustness.
+This investigation was not able to give a concrete answer
+how a choice of pre-text task influences adversarial robustness.
 \\
-Nevertheless, rotation and jigsaw had once again been proved useful in increasing standard classification accuracy.
+Nevertheless, rotation and jigsaw had once again been proved useful in increasing standard classification accuracy,
+and, in addition, made out classifiers slightly less adversarial vulnerable.
 Therefore, it would be safe to say,
 that including either of those in the training process could be considered a good practise.
 
